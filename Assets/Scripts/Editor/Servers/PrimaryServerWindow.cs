@@ -48,7 +48,7 @@ public class PrimaryServerWindow : EditorWindow {
 	void OnGUI () {
 		//Local Kinect Section
 		EditorGUILayout.BeginHorizontal();
-		EditorGUILayout.TextField ("Local Kinects: ", localKinects);
+		localKinects = EditorGUILayout.TextField ("Local Kinects: ", localKinects);
 		if (GUILayout.Button("Start Kinect Server",GUILayout.Width(buttonWidth)))
 		{
 			StartKinectServers();
@@ -57,7 +57,7 @@ public class PrimaryServerWindow : EditorWindow {
 
 		//Local Projectors Section
 		EditorGUILayout.BeginHorizontal();
-		EditorGUILayout.TextField ("Local Projectors: ", localProjectors);
+		localProjectors = EditorGUILayout.TextField ("Local Projectors: ", localProjectors);
 		if (GUILayout.Button("Start Projector Server",GUILayout.Width(buttonWidth)))
 		{
 			StartProjectorServers();
