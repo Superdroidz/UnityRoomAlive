@@ -4,7 +4,6 @@ using UnityEngine;
 namespace Ensemble {
     public class EnsembleManager : MonoBehaviour {
 
-        public Camera cameraPrefab;
         public string ensembleFolder;
         public EnsembleData Data { get; private set; }
 
@@ -16,21 +15,18 @@ namespace Ensemble {
 
             // Set this to choose which projector this Unity instance uses.
             int localProjectorNumber = 0;
-            CreateCameraFromProjectorData(cameraPrefab, Data.projectors.ElementAt(localProjectorNumber));
+            CreateCameraFromProjectorData(Data.projectors.ElementAt(localProjectorNumber));
         }
 
-        Camera CreateCameraFromProjectorData(Camera cameraPrefab, ProjectorData projector) {
-            Camera cameraInstance = Instantiate(cameraPrefab);
-
+        void CreateCameraFromProjectorData(ProjectorData projector) {
             // Scale z by -1 because Unity uses OpenGL convention where Camera's forward
             // direction is negative.
-            cameraInstance.worldToCameraMatrix =
+            Camera.main.worldToCameraMatrix =
                 Matrix4x4.Scale(new Vector3(1, 1, -1)) * projector.pose.inverse;
-            cameraInstance.projectionMatrix =
+            Camera.main.projectionMatrix =
                 ProjectionMatrixFromCameraMatrix(projector.cameraMatrix, projector.width, projector.height);
 
-            cameraInstance.tag = "MainCamera";
-            return cameraInstance;
+            Camera.main.tag = "MainCamera";
         }
 
         Matrix4x4 ProjectionMatrixFromCameraMatrix(Matrix4x4 cameraMatrix,
