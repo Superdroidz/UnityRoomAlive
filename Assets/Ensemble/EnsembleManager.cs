@@ -15,10 +15,10 @@ namespace Ensemble {
 
             // Set this to choose which projector this Unity instance uses.
             int localProjectorNumber = 0;
-            CreateCameraFromProjectorData(Data.projectors.ElementAt(localProjectorNumber));
+            SetCameraFromProjector(Data.projectors.ElementAt(localProjectorNumber));
         }
 
-        void CreateCameraFromProjectorData(ProjectorData projector) {
+        void SetCameraFromProjector(ProjectorData projector) {
             // Scale z by -1 because Unity uses OpenGL convention where Camera's forward
             // direction is negative.
             Matrix4x4 worldToCameraMatrix = Matrix4x4.Scale(new Vector3(1, 1, -1)) * projector.pose.inverse;
