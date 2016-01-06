@@ -27,10 +27,10 @@ namespace Ensemble {
 
         Matrix4x4 ProjectionMatrixFromCameraMatrix(Matrix4x4 cameraMatrix,
                 float projectorWidth, float projectorHeight) {
-            float fx = (float)cameraMatrix[0, 0];
-            float fy = (float)cameraMatrix[1, 1];
-            float cx = (float)cameraMatrix[0, 2];
-            float cy = (float)cameraMatrix[1, 2];
+            float fx = cameraMatrix[0, 0];
+            float fy = cameraMatrix[1, 1];
+            float cx = cameraMatrix[0, 2];
+            float cy = cameraMatrix[1, 2];
 
             float near = 0.1f;
             float far = 100.0f;
