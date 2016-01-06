@@ -71,10 +71,7 @@ public class ParseWindow : EditorWindow {
             {
                 int index = i + count;
                 if(projectorsNames[i].InnerText.Length > 0) {
-                    Debug.Log("original:" + tempNames[index].InnerText);
-                    Debug.Log("new:" + projectorsNames[i].InnerText);
                     tempNames[index+1].InnerText = projectorsNames[i].InnerText;
-                    Debug.Log(tempNames[index].InnerText);
                 }
                 if (projectorsIP[i].InnerText.Length > 0)
                 {
