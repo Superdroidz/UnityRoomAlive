@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 
 public class ParseWindow : EditorWindow {
@@ -8,35 +9,37 @@ public class ParseWindow : EditorWindow {
     private static string windowTitle = "XML File";
     private static int buttonWidth = 130;
 
-    XmlNodeList kinects;
-    XmlNodeList projectors;
-    XmlNodeList names;
+    XmlNodeList kinectsNames;
+    
+    XmlNodeList kinectsIP;
+    XmlNodeList projectorsNames;
+    XmlNodeList projectorsIP;
+    XmlNodeList projectorsDisplay;
 
-    string localKinects = "0";
-    string localProjectors = "0";
-
-    string totalKinects = "0";
-    string totalProjectors = "0";
+    bool open = true;
 
     void ParseFile()
     {
         XmlDocument doc = new XmlDocument();
         doc.Load("Assets/XML File/cal.xml");
 
-        kinects = doc.GetElementsByTagName("cameras");
+        XmlNodeList kinects = doc.GetElementsByTagName("cameras");
         string kinect = "<doc>" + kinects[0].InnerXml + "</doc>";
-        kinects = getNames(kinect);
+        kinectsNames = getTags(kinect, "name");
+        kinectsIP = getTags(kinect, "hostNameOrAddress");
 
-        projectors = doc.GetElementsByTagName("projectors");
+        XmlNodeList projectors = doc.GetElementsByTagName("projectors");
         string project = "<doc>" + projectors[0].InnerXml + "</doc>";
-        projectors = getNames(project);
+        projectorsNames = getTags(project, "name");
+        projectorsIP = getTags(project, "hostNameOrAddress");
+        projectorsDisplay = getTags(project, "displayIndex");
     }
 
-    XmlNodeList getNames(string xml)
+    XmlNodeList getTags(string xml, string tag)
     {
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xml);
-        XmlNodeList results = doc.GetElementsByTagName("name");
+        XmlNodeList results = doc.GetElementsByTagName(tag);
         return results;
     }
 
@@ -51,23 +54,40 @@ public class ParseWindow : EditorWindow {
 
     void OnGUI()
     {
-        ParseFile();
         
-        foreach (XmlNode kinect in kinects)
+        if (open)
         {
-            EditorGUILayout.BeginHorizontal();
-            localKinects = EditorGUILayout.TextField("Kinect Name: ", kinect.InnerText);
-            EditorGUILayout.EndHorizontal();
+            open = false;
+            ParseFile();
         }
-        
-        
-        foreach (XmlNode projector in projectors)
-        {
-            EditorGUILayout.BeginHorizontal();
-            localKinects = EditorGUILayout.TextField("Projector Name: ", projector.InnerText);
-            EditorGUILayout.EndHorizontal();
-        }
-        
+            for (int i = 0; i < kinectsNames.Count; i++)
+            {
+                EditorGUILayout.BeginHorizontal();
+                kinectsNames[i].InnerText = EditorGUILayout.TextField("Kinect " + (i) + "'s Name: ", kinectsNames[i].InnerText);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                kinectsIP[i].InnerText = EditorGUILayout.TextField("Kinect " + (i) + "'s IP: ", kinectsIP[i].InnerText);
+                EditorGUILayout.EndHorizontal();
+            }
+
+
+            for (int i = 0; i < projectorsNames.Count; i++)
+            {
+                EditorGUILayout.BeginHorizontal();
+                projectorsNames[i].InnerText = EditorGUILayout.TextField("Projector " + (i) + "'s Name: ", projectorsNames[i].InnerText);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                projectorsIP[i].InnerText = EditorGUILayout.TextField("Projector " + (i) + "'s IP: ", projectorsIP[i].InnerText);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                projectorsDisplay[i].InnerText = EditorGUILayout.TextField("Projector " + (i) + "'s Display Index: ", projectorsDisplay[i].InnerText);
+                EditorGUILayout.EndHorizontal();
+            }
+
+            if (GUILayout.Button("Parse XML File", GUILayout.Width(buttonWidth)))
+            {
+                ParseFile();
+            };
         
     }
 }
