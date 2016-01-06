@@ -21,8 +21,13 @@ namespace Ensemble {
         void CreateCameraFromProjectorData(ProjectorData projector) {
             // Scale z by -1 because Unity uses OpenGL convention where Camera's forward
             // direction is negative.
-            Camera.main.worldToCameraMatrix =
-                Matrix4x4.Scale(new Vector3(1, 1, -1)) * projector.pose.inverse;
+            Matrix4x4 worldToCameraMatrix = Matrix4x4.Scale(new Vector3(1, 1, -1)) * projector.pose.inverse;
+            // Scale down translations by 10 (seems to help in the case of 219b's calibration)
+            for (int i = 0; i <= 2; i++) {
+                worldToCameraMatrix[i, 3] = worldToCameraMatrix[i, 3] / 10;
+            }
+            Debug.Log(worldToCameraMatrix);
+            Camera.main.worldToCameraMatrix = worldToCameraMatrix;
             Camera.main.projectionMatrix =
                 ProjectionMatrixFromCameraMatrix(projector.cameraMatrix, projector.width, projector.height);
 
@@ -36,8 +41,8 @@ namespace Ensemble {
             float cx = cameraMatrix[0, 2];
             float cy = cameraMatrix[1, 2];
 
-            float near = 0.1f;
-            float far = 100.0f;
+            float near = 0.3f;
+            float far = 1000.0f;
 
             float w = projectorWidth;
             float h = projectorHeight;
