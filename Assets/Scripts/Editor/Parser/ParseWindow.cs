@@ -10,37 +10,83 @@ public class ParseWindow : EditorWindow {
     private static int buttonWidth = 130;
 
     XmlNodeList kinectsNames;
-    
     XmlNodeList kinectsIP;
     XmlNodeList projectorsNames;
     XmlNodeList projectorsIP;
     XmlNodeList projectorsDisplay;
 
+    
+
+    XmlDocument doc;
+
     bool open = true;
 
     void ParseFile()
     {
-        XmlDocument doc = new XmlDocument();
+        doc = new XmlDocument();
         doc.Load("Assets/XML File/cal.xml");
 
         XmlNodeList kinects = doc.GetElementsByTagName("cameras");
-        string kinect = "<doc>" + kinects[0].InnerXml + "</doc>";
+        string kinect = kinects[0].OuterXml;
         kinectsNames = getTags(kinect, "name");
         kinectsIP = getTags(kinect, "hostNameOrAddress");
 
         XmlNodeList projectors = doc.GetElementsByTagName("projectors");
-        string project = "<doc>" + projectors[0].InnerXml + "</doc>";
+        string project = projectors[0].OuterXml;
         projectorsNames = getTags(project, "name");
         projectorsIP = getTags(project, "hostNameOrAddress");
         projectorsDisplay = getTags(project, "displayIndex");
+
+        
     }
 
     XmlNodeList getTags(string xml, string tag)
     {
-        XmlDocument doc = new XmlDocument();
-        doc.LoadXml(xml);
-        XmlNodeList results = doc.GetElementsByTagName(tag);
+        XmlDocument temp = new XmlDocument();
+        temp.LoadXml(xml);
+        XmlNodeList results = temp.GetElementsByTagName(tag);
         return results;
+    }
+
+    void SaveChanges()
+    {
+        XmlNodeList tempNames = doc.GetElementsByTagName("name");
+        XmlNodeList tempIP = doc.GetElementsByTagName("hostNameOrAddress");
+        XmlNodeList tempDisplay = doc.GetElementsByTagName("displayIndex");
+        int count = 0;
+        for (int i = 0; i < kinectsNames.Count; i++)
+            {
+                if (kinectsNames[i].InnerText.Length > 0)
+                {
+                    tempNames[i].InnerText = kinectsNames[i].InnerText;
+                }
+                if (kinectsIP[i].InnerText.Length > 0)
+                {
+                    tempIP[i].InnerText = kinectsIP[i].InnerText;
+                }
+                count++;
+            }
+        
+            for (int i = 0; i < projectorsNames.Count; i++)
+            {
+                int index = i + count;
+                if(projectorsNames[i].InnerText.Length > 0) {
+                    Debug.Log("original:" + tempNames[index].InnerText);
+                    Debug.Log("new:" + projectorsNames[i].InnerText);
+                    tempNames[index+1].InnerText = projectorsNames[i].InnerText;
+                    Debug.Log(tempNames[index].InnerText);
+                }
+                if (projectorsIP[i].InnerText.Length > 0)
+                {
+                    tempIP[index].InnerText = projectorsIP[i].InnerText;
+                }
+                if (projectorsDisplay[i].InnerText.Length > 0)
+                {
+                    tempDisplay[i].InnerText = projectorsDisplay[i].InnerText;
+                }
+            }
+            doc.Save("Assets/XML File/cal.xml");
+
     }
 
     public void ShowWindow()
@@ -60,6 +106,7 @@ public class ParseWindow : EditorWindow {
             open = false;
             ParseFile();
         }
+        if (kinectsNames != null) {
             for (int i = 0; i < kinectsNames.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
@@ -69,8 +116,10 @@ public class ParseWindow : EditorWindow {
                 kinectsIP[i].InnerText = EditorGUILayout.TextField("Kinect " + (i) + "'s IP: ", kinectsIP[i].InnerText);
                 EditorGUILayout.EndHorizontal();
             }
+    }
 
-
+        if (projectorsNames != null)
+        {
             for (int i = 0; i < projectorsNames.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
@@ -83,10 +132,16 @@ public class ParseWindow : EditorWindow {
                 projectorsDisplay[i].InnerText = EditorGUILayout.TextField("Projector " + (i) + "'s Display Index: ", projectorsDisplay[i].InnerText);
                 EditorGUILayout.EndHorizontal();
             }
+        }
 
             if (GUILayout.Button("Parse XML File", GUILayout.Width(buttonWidth)))
             {
                 ParseFile();
+            };
+
+            if (GUILayout.Button("Save Changes", GUILayout.Width(buttonWidth)))
+            {
+                SaveChanges();
             };
         
     }

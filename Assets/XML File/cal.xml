@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ProjectorCameraEnsemble xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/RoomAliveToolkit">
   <cameras>
     <ProjectorCameraEnsemble.Camera>
@@ -41,7 +41,7 @@
       <pose i:nil="true" />
     </ProjectorCameraEnsemble.Camera>
   </cameras>
-  <name>Untitled</name>
+  <name>1</name>
   <projectors>
     <ProjectorCameraEnsemble.Projector>
       <cameraMatrix i:nil="true" />
