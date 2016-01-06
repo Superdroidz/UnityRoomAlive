@@ -5,3 +5,4 @@
 # Visual Studio Stuff
 *.csproj
 *.sln
+.vs/*
