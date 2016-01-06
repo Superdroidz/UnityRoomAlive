@@ -8,6 +8,8 @@ public class RoomAliveMenuItem : EditorWindow{
 	public static SecondaryServerWindow SecondaryWindow;
 	//public static SlaveServerWindow window;
 
+    public static ParseWindow ParseWindow;
+
 	[MenuItem("RoomAlive/Start Server")]
 	
 	[MenuItem("RoomAlive/Start Server/Primary", false, 1)] // Should require Validation
@@ -42,4 +44,11 @@ public class RoomAliveMenuItem : EditorWindow{
 	{
 
 	}
+
+    [MenuItem("RoomAlive/Parse/XML", false, 151)]
+    private static void ParseXML()
+    {
+        ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
+        ParseWindow.ShowWindow();
+    }
 }

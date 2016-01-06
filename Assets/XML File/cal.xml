@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectorCameraEnsemble xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/RoomAliveToolkit">
+  <cameras>
+    <ProjectorCameraEnsemble.Camera>
+      <calibration i:nil="true" />
+      <hostNameOrAddress>localhost</hostNameOrAddress>
+      <name>0</name>
+      <pose>
+        <ValuesByColumn xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:ArrayOfdouble>
+            <d5p1:double>1</d5p1:double>
+            <d5p1:double>0</d5p1:double>
+            <d5p1:double>0</d5p1:double>
+            <d5p1:double>0</d5p1:double>
+          </d5p1:ArrayOfdouble>
+          <d5p1:ArrayOfdouble>
+            <d5p1:double>0</d5p1:double>
+            <d5p1:double>1</d5p1:double>
+            <d5p1:double>0</d5p1:double>
+            <d5p1:double>0</d5p1:double>
+          </d5p1:ArrayOfdouble>
+          <d5p1:ArrayOfdouble>
+            <d5p1:double>0</d5p1:double>
+            <d5p1:double>0</d5p1:double>
+            <d5p1:double>1</d5p1:double>
+            <d5p1:double>0</d5p1:double>
+          </d5p1:ArrayOfdouble>
+          <d5p1:ArrayOfdouble>
+            <d5p1:double>0</d5p1:double>
+            <d5p1:double>0</d5p1:double>
+            <d5p1:double>0</d5p1:double>
+            <d5p1:double>1</d5p1:double>
+          </d5p1:ArrayOfdouble>
+        </ValuesByColumn>
+      </pose>
+    </ProjectorCameraEnsemble.Camera>
+    <ProjectorCameraEnsemble.Camera>
+      <calibration i:nil="true" />
+      <hostNameOrAddress>localhost</hostNameOrAddress>
+      <name>1</name>
+      <pose i:nil="true" />
+    </ProjectorCameraEnsemble.Camera>
+  </cameras>
+  <name>Untitled</name>
+  <projectors>
+    <ProjectorCameraEnsemble.Projector>
+      <cameraMatrix i:nil="true" />
+      <displayIndex>0</displayIndex>
+      <height>0</height>
+      <hostNameOrAddress>localhost</hostNameOrAddress>
+      <lensDistortion i:nil="true" />
+      <lockIntrinsics>false</lockIntrinsics>
+      <name>0</name>
+      <pose i:nil="true" />
+      <width>0</width>
+    </ProjectorCameraEnsemble.Projector>
+    <ProjectorCameraEnsemble.Projector>
+      <cameraMatrix i:nil="true" />
+      <displayIndex>0</displayIndex>
+      <height>0</height>
+      <hostNameOrAddress>localhost</hostNameOrAddress>
+      <lensDistortion i:nil="true" />
+      <lockIntrinsics>false</lockIntrinsics>
+      <name>1</name>
+      <pose i:nil="true" />
+      <width>0</width>
+    </ProjectorCameraEnsemble.Projector>
+  </projectors>
+</ProjectorCameraEnsemble>
