@@ -4,6 +4,8 @@ using System.Collections;
 using System.Diagnostics;
 
 public class RoomAliveMenuItem : EditorWindow{
+    public static ParseWindow ParseWindow;
+
     private static bool fileSetupComplete = false;
     private static bool calibrationComplete = false;
 
@@ -54,5 +56,15 @@ public class RoomAliveMenuItem : EditorWindow{
     private static bool ImportRoomValidation()
     {
         return calibrationComplete;
+    }
+
+
+
+    [MenuItem("RoomAlive/Parse/XML", false, 151)]
+    private static void ParseXML()
+    {
+        ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
+        ParseWindow.ShowWindow();
+
     }
 }
