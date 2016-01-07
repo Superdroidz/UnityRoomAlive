@@ -3,6 +3,7 @@
 [Tt]emp/
 
 # Visual Studio Stuff
+.vs/
 *.csproj
 *.sln
-.vs/*
+*.suo
