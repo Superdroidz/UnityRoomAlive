@@ -9,6 +9,8 @@ namespace Ensemble {
         public string ensembleFolder;
         public EnsembleData Data { get; private set; }
 
+        private List<Vector3> CameraCornerHitPositions { get; set; }
+
         // Use this for initialization
         void Start() {
             string ensembleFilePath = Application.dataPath +
@@ -20,36 +22,29 @@ namespace Ensemble {
             SetCameraFromProjector(Data.projectors.ElementAt(localProjectorNumber));
         }
 
+        void OnDrawGizmos() {
+            if (CameraCornerHitPositions != null) {
+                foreach (Vector3 position in CameraCornerHitPositions) {
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawCube(position, Vector3.one / 3);
+                }
+            }
+        }
+
         void SetCameraFromProjector(ProjectorData projector) {
             // Scale z by -1 because Unity uses OpenGL convention where Camera's forward
             // direction is negative.
-            Matrix4x4 worldToCameraMatrix = projector.pose.inverse;
+            Matrix4x4 worldToCameraMatrix = projector.pose;
             worldToCameraMatrix[2, 2] = -worldToCameraMatrix[2, 2];
-            //for (int i = 0; i <= 2; i++) {
-            //    worldToCameraMatrix[i, 3] /= 10;
-            //}
             Debug.Log(worldToCameraMatrix);
             Camera.main.worldToCameraMatrix = worldToCameraMatrix;
 
-            Matrix4x4 projectionMatrix = ProjectionMatrixFromCameraMatrix(projector.cameraMatrix, projector.width, projector.height);
+            Matrix4x4 projectionMatrix = ProjectionMatrixFromCameraMatrix(projector.cameraMatrix,
+                projector.width, projector.height);
             Debug.Log(projectionMatrix);
             Camera.main.projectionMatrix = projectionMatrix;
 
             DebugViewCameraCorners();
-
-            //Matrix4x4 rotationMatrix = projector.pose.inverse;
-            //Vector4 translation_vec4 = rotationMatrix.GetColumn(3);
-            //Vector3 translation = new Vector3(translation_vec4.x, translation_vec4.y, translation_vec4.z);
-            //rotationMatrix.SetColumn(3, new Vector4(0, 0, 0, 1));
-            //Vector3 scale = Vector3.one;
-            //for (int j = 0; j < 3; j++) {
-            //    scale[j] = rotationMatrix.GetColumn(j).magnitude;
-            //    rotationMatrix.SetColumn(j, rotationMatrix.GetColumn(j) / scale[j]);
-            //}
-            //Quaternion rotation = QuaternionFromMatrix(rotationMatrix);
-            //Camera.main.transform.Translate(translation);
-            //Camera.main.transform.rotation = rotation;
-            //Camera.main.transform.localScale = scale;
         }
 
         private void DebugViewCameraCorners() {
@@ -60,10 +55,12 @@ namespace Ensemble {
                 Camera.main.ViewportPointToRay(new Vector3(0, 1, 0))
             };
 
-            RaycastHit hit;
+            CameraCornerHitPositions = new List<Vector3>();
             foreach (Ray ray in rays) {
-                if (Physics.Raycast(ray, out hit, 100)) {
-                    Gizmos.DrawCube(hit.transform.position, Vector3.one / 3);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 1000)) {
+                    Debug.Log(hit.point);
+                    CameraCornerHitPositions.Add(hit.point);
                 }
             }
         }
@@ -81,11 +78,20 @@ namespace Ensemble {
             float w = projectorWidth;
             float h = projectorHeight;
 
+            // fx, fy, cx, cy are in pixels
+            // input coordinate system is x left, y up, z forward (right handed)
+            // project to view volume where x, y in [-1, 1], z in [0, 1], x right, y up, z forward
+            // pre-multiply matrix
+
+            // -(2 * fx / w),           0,   -(2 * cx / w - 1),                           0,
+            //             0,  2 * fy / h,      2 * cy / h - 1,                           0,
+            //             0,           0,  far / (far - near),  -near * far / (far - near),
+            //             0,           0,                   -1,                           0
             return new Matrix4x4() {
-                m00 = -(2 * fx / w), m01 = 0, m02 = -(2 * cx / w - 1), m03 = 0,
-                m10 = 0, m11 = 2 * fy / h, m12 = 2 * cy / h - 1, m13 = 0,
-                m20 = 0, m21 = 0, m22 = far / (far - near), m23 = -near * far / (far - near),
-                m30 = 0, m31 = 0, m32 = 1, m33 = 0
+                m00 = 2 * fx / w, m01 = 0, m02 = 1 - 2 * cx / w, m03 = 0,
+                m10 = 0, m11 = 2 * fy / h, m12 = 1 - 2 * cy / h, m13 = 0,
+                m20 = 0, m21 = 0,          m22 = -(far + near) / (far - near), m23 = -2 * near * far / (far - near),
+                m30 = 0, m31 = 0,          m32 = -1, m33 = 0
             };
         }
 
