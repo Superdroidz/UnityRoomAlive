@@ -24,9 +24,13 @@ namespace Ensemble {
 
         void OnDrawGizmos() {
             if (CameraCornerHitPositions != null) {
-                foreach (Vector3 position in CameraCornerHitPositions) {
+                for (int i = 0; i < CameraCornerHitPositions.Count(); i++) {
                     Gizmos.color = Color.red;
-                    Gizmos.DrawCube(position, Vector3.one / 3);
+                    Vector3 from = CameraCornerHitPositions[i];
+                    Vector3 to = (i + 1 != CameraCornerHitPositions.Count()) ?
+                                 CameraCornerHitPositions[i + 1] :
+                                 CameraCornerHitPositions[0];
+                    Gizmos.DrawLine(from, to);
                 }
             }
         }
@@ -35,10 +39,12 @@ namespace Ensemble {
             // Scale z by -1 because Unity uses OpenGL convention where Camera's forward
             // direction is negative.
             Matrix4x4 worldToCameraMatrix = projector.pose.inverse * Matrix4x4.Scale(new Vector3(1, 1, -1));
+            Debug.Log(worldToCameraMatrix);
             Camera.main.worldToCameraMatrix = worldToCameraMatrix;
 
             Matrix4x4 projectionMatrix = ProjectionMatrixFromCameraMatrix(
                 projector.cameraMatrix, projector.width, projector.height);
+            Debug.Log(projectionMatrix);
             Camera.main.projectionMatrix = projectionMatrix;
 
             DebugViewCameraCorners();
