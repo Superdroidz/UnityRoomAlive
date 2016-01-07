@@ -126,7 +126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11498836, guid: 32a562cb14d94d245b362ea34ee3e9ac, type: 2}
       propertyPath: ensembleFolder
-      value: 219b
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 32a562cb14d94d245b362ea34ee3e9ac, type: 2}
@@ -144,7 +144,7 @@ GameObject:
   - 92: {fileID: 1449524131}
   - 81: {fileID: 1449524130}
   m_Layer: 0
-  m_Name: Main Canera
+  m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
