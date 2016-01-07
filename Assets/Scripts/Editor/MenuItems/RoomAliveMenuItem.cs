@@ -45,7 +45,7 @@ public class RoomAliveMenuItem : EditorWindow{
     }
 
     //Validation for Running a calibration. Stops user running the calibration unless a setup file has been created.
-    [MenuItem("RoomAlive/Run Calibration", true)]
+    [MenuItem("RoomAlive/Run Calibration", false)]// TODO : Change back to true once testing is complete.
     private static bool CalibrationValidation()
     {
         return fileSetupComplete;
@@ -58,7 +58,7 @@ public class RoomAliveMenuItem : EditorWindow{
     }
 
     //Validation for Importing an Object File into Unity. Stops the user from importing a room before running the calibration.
-    [MenuItem("RoomAlive/Import Room", true)]
+    [MenuItem("RoomAlive/Import Room", false)] //TODO : Change back to true once testing is complete.
     private static bool ImportRoomValidation()
     {
         return calibrationComplete;
