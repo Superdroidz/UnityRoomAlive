@@ -1,3 +1,15 @@
+# Project stuff
+Assets/Calibrations/**/*.bin*
+Assets/Calibrations/**/*.jpg*
+Assets/Calibrations/**/*.mat*
+Assets/Calibrations/**/*.mtl*
+Assets/Calibrations/**/*.obj*
+Assets/Calibrations/**/*.ply*
+Assets/Calibrations/**/*.tiff*
+Assets/Calibrations/**/camera*.meta
+Assets/Calibrations/**/projector*.meta
+Assets/Calibrations/**/Materials.meta
+
 # Unity stuff
 [Ll]ibrary/
 [Tt]emp/
