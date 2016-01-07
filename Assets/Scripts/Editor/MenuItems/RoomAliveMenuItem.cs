@@ -10,46 +10,18 @@ public class RoomAliveMenuItem : EditorWindow{
     private static bool fileSetupComplete = false;
     private static bool calibrationComplete = false;
 
-    [MenuItem("Custom Editor/Add Mesh Colliders %m")]
-    private static void PopulateMeshColliders()
-    {
-        GameObject selection = Selection.activeGameObject;
-        AddMeshToObjectOrChildren(selection);
-    }
-
-    private static void AddMeshToObjectOrChildren(GameObject selection)
-    {
-        if (selection.GetComponent<MeshFilter>() != null &&
-            selection.GetComponent<Collider>() == null)
-        {
-            var filter = selection.GetComponent<MeshFilter>().sharedMesh;
-            MeshCollider collider = selection.AddComponent<MeshCollider>();
-            collider.sharedMesh = filter;
-            UnityEngine.Debug.Log("Added MeshCollider to object " + selection.name);
-        }
-        else
-        {
-            foreach (Transform child in selection.transform)
-            {
-                AddMeshToObjectOrChildren(child.gameObject);
-            }
-        }
-    }
-
     [MenuItem("RoomAlive/Start Kinect Server", false, 1)]
     private static void RunKinectServer()
     {
-        Process process;
         string kinectServerPath = @"C:\Users\Adam\Desktop\3rdYearProject\UnityExtension\RoomAlive\RoomAliveToolkit-master\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe";
-        StartProcess(out process, kinectServerPath,"");
+        Process.Start(kinectServerPath);
     }
 
     [MenuItem("RoomAlive/Start Projector Server", false, 2)]
     private static void RunProjectorServer()
     {
-        Process process;
         string projectorServerPath = @"C:\Users\Adam\Desktop\3rdYearProject\UnityExtension\RoomAlive\RoomAliveToolkit-master\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe";
-        StartProcess(out process, projectorServerPath, "");
+        Process.Start(projectorServerPath);
     }
 
     [MenuItem("RoomAlive/Create New Setup", false, 51)]
@@ -57,9 +29,8 @@ public class RoomAliveMenuItem : EditorWindow{
     {
         fileSetupComplete = false;
         calibrationComplete = false;
-        Process process;
         string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\CalibrateEnsembleViaConsole\bin\Debug\CalibrateEnsembleViaConsole";
-        StartProcess(out process, consoleApplicationPath, "create C:\\Users\\Adam\\Desktop\\3rdYearProject\\TestFolder");
+        Process.Start(consoleApplicationPath);
         fileSetupComplete = true;
     }
 
@@ -73,6 +44,7 @@ public class RoomAliveMenuItem : EditorWindow{
         calibrationComplete = true;
     }
 
+    //Validation for Running a calibration. Stops user running the calibration unless a setup file has been created.
     [MenuItem("RoomAlive/Run Calibration", true)]
     private static bool CalibrationValidation()
     {
@@ -85,19 +57,18 @@ public class RoomAliveMenuItem : EditorWindow{
         EditorApplication.ExecuteMenuItem("Assets/Import New Asset...");
     }
 
+    //Validation for Importing an Object File into Unity. Stops the user from importing a room before running the calibration.
     [MenuItem("RoomAlive/Import Room", true)]
     private static bool ImportRoomValidation()
     {
         return calibrationComplete;
     }
 
-
-
     [MenuItem("RoomAlive/Parse/XML", false, 151)]
     private static void ParseXML()
     {
         ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
-        ParseWindow.ShowWindow();
+        ParseWindow.ShowWindow();   
 
     }
 
