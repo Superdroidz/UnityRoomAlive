@@ -3,6 +3,7 @@ using UnityEditor;
 using System.Collections;
 using System.Diagnostics;
 using System;
+using System.IO;
 
 public class RoomAliveMenuItem : EditorWindow{
     public static ParseWindow ParseWindow;
@@ -29,8 +30,12 @@ public class RoomAliveMenuItem : EditorWindow{
     {
         fileSetupComplete = false;
         calibrationComplete = false;
+        string filePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
+        string folderPath = Path.GetDirectoryName(filePath);
         string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\CalibrateEnsembleViaConsole\bin\Debug\CalibrateEnsembleViaConsole";
-        Process.Start(consoleApplicationPath);
+        string arguments = "create " + "\"" + @folderPath + "\"";
+        UnityEngine.Debug.Log(arguments);
+        Process.Start(consoleApplicationPath, arguments);
         fileSetupComplete = true;
     }
 
@@ -41,12 +46,12 @@ public class RoomAliveMenuItem : EditorWindow{
         ParseWindow.ShowWindow();   
 
     }
-    //Validation for editing the current setup file. Stops user from editing a non-existent XML file.
-    [MenuItem("RoomAlive/Edit Setup", false)] // TODO:  Change back to true once testing is complete.
-    private static bool ParseXMLValidation()
-    {
-        return fileSetupComplete;
-    }
+    ////Validation for editing the current setup file. Stops user from editing a non-existent XML file.
+    //[MenuItem("RoomAlive/Edit Setup", false)] // TODO:  Change back to true once testing is complete.
+    //private static bool ParseXMLValidation()
+    //{
+    //    return fileSetupComplete;
+    //}
     [MenuItem("RoomAlive/Run Calibration", false, 101)]
     private static void Calibrate()
     {
