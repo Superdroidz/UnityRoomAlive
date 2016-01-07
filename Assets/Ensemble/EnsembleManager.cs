@@ -34,14 +34,11 @@ namespace Ensemble {
         void SetCameraFromProjector(ProjectorData projector) {
             // Scale z by -1 because Unity uses OpenGL convention where Camera's forward
             // direction is negative.
-            Matrix4x4 worldToCameraMatrix = projector.pose;
-            worldToCameraMatrix[2, 2] = -worldToCameraMatrix[2, 2];
-            Debug.Log(worldToCameraMatrix);
+            Matrix4x4 worldToCameraMatrix = projector.pose.inverse * Matrix4x4.Scale(new Vector3(1, 1, -1));
             Camera.main.worldToCameraMatrix = worldToCameraMatrix;
 
-            Matrix4x4 projectionMatrix = ProjectionMatrixFromCameraMatrix(projector.cameraMatrix,
-                projector.width, projector.height);
-            Debug.Log(projectionMatrix);
+            Matrix4x4 projectionMatrix = ProjectionMatrixFromCameraMatrix(
+                projector.cameraMatrix, projector.width, projector.height);
             Camera.main.projectionMatrix = projectionMatrix;
 
             DebugViewCameraCorners();
@@ -59,7 +56,6 @@ namespace Ensemble {
             foreach (Ray ray in rays) {
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 1000)) {
-                    Debug.Log(hit.point);
                     CameraCornerHitPositions.Add(hit.point);
                 }
             }
@@ -90,7 +86,7 @@ namespace Ensemble {
             return new Matrix4x4() {
                 m00 = 2 * fx / w, m01 = 0, m02 = 1 - 2 * cx / w, m03 = 0,
                 m10 = 0, m11 = 2 * fy / h, m12 = 1 - 2 * cy / h, m13 = 0,
-                m20 = 0, m21 = 0,          m22 = -(far + near) / (far - near), m23 = -2 * near * far / (far - near),
+                m20 = 0, m21 = 0,          m22 = -(far + near) / (far - near), m23 = -2 * far * near / (far - near),
                 m30 = 0, m31 = 0,          m32 = -1, m33 = 0
             };
         }
