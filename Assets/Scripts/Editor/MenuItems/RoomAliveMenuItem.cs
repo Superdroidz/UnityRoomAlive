@@ -7,6 +7,7 @@ using System.IO;
 
 public class RoomAliveMenuItem : EditorWindow{
     public static ParseWindow ParseWindow;
+    private static string currentXMLFilePath;
 
     private static bool fileSetupComplete = false;
     private static bool calibrationComplete = false;
@@ -30,8 +31,8 @@ public class RoomAliveMenuItem : EditorWindow{
     {
         fileSetupComplete = false;
         calibrationComplete = false;
-        string filePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
-        string folderPath = Path.GetDirectoryName(filePath);
+        currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
+        string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\CalibrateEnsembleViaConsole\bin\Debug\CalibrateEnsembleViaConsole";
         string arguments = "create " + "\"" + @folderPath + "\"";
         UnityEngine.Debug.Log(arguments);
@@ -43,6 +44,7 @@ public class RoomAliveMenuItem : EditorWindow{
     private static void ParseXML()
     {
         ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
+        ParseWindow.setFilePath(currentXMLFilePath);
         ParseWindow.ShowWindow();   
 
     }
