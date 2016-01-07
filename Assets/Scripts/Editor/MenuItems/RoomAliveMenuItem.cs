@@ -34,7 +34,20 @@ public class RoomAliveMenuItem : EditorWindow{
         fileSetupComplete = true;
     }
 
-    [MenuItem("RoomAlive/Run Calibration", false, 101)]// Requires Validation
+    [MenuItem("RoomAlive/Edit Setup", false, 52)]
+    private static void ParseXML()
+    {
+        ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
+        ParseWindow.ShowWindow();   
+
+    }
+    //Validation for editing the current setup file. Stops user from editing a non-existent XML file.
+    [MenuItem("RoomAlive/Edit Setup", false)] // TODO:  Change back to true once testing is complete.
+    private static bool ParseXMLValidation()
+    {
+        return fileSetupComplete;
+    }
+    [MenuItem("RoomAlive/Run Calibration", false, 101)]
     private static void Calibrate()
     {
         Process process;
@@ -64,13 +77,7 @@ public class RoomAliveMenuItem : EditorWindow{
         return calibrationComplete;
     }
 
-    [MenuItem("RoomAlive/Parse/XML", false, 151)]
-    private static void ParseXML()
-    {
-        ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
-        ParseWindow.ShowWindow();   
 
-    }
 
     private static void StartProcess(out Process proc, string processPath, string args)
     {
