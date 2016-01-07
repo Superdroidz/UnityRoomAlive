@@ -8,6 +8,7 @@ public class ParseWindow : EditorWindow {
 
     private static string windowTitle = "XML File";
     private static int buttonWidth = 130;
+    private string xmlFilePath;
 
     XmlNodeList kinectsNames;
     XmlNodeList kinectsIP;
@@ -21,10 +22,16 @@ public class ParseWindow : EditorWindow {
 
     bool open = true;
 
+
+    public void setFilePath(string filePath)
+    {
+        xmlFilePath = filePath;
+    }
+
     void ParseFile()
     {
         doc = new XmlDocument();
-        doc.Load("Assets/XML File/cal.xml");
+        doc.Load(xmlFilePath);
 
         XmlNodeList kinects = doc.GetElementsByTagName("cameras");
         string kinect = kinects[0].OuterXml;

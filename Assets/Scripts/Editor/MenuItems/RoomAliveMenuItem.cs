@@ -2,9 +2,11 @@
 using UnityEditor;
 using System.Diagnostics;
 using System;
+using System.IO;
 
 public class RoomAliveMenuItem : EditorWindow{
     public static ParseWindow ParseWindow;
+    private static string currentXMLFilePath;
 
     private static bool fileSetupComplete = false;
     private static bool calibrationComplete = false;
@@ -45,8 +47,12 @@ public class RoomAliveMenuItem : EditorWindow{
     {
         fileSetupComplete = false;
         calibrationComplete = false;
+        currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
+        string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\CalibrateEnsembleViaConsole\bin\Debug\CalibrateEnsembleViaConsole";
-        Process.Start(consoleApplicationPath);
+        string arguments = "create " + "\"" + @folderPath + "\"";
+        UnityEngine.Debug.Log(arguments);
+        Process.Start(consoleApplicationPath, arguments);
         fileSetupComplete = true;
     }
 
@@ -54,15 +60,16 @@ public class RoomAliveMenuItem : EditorWindow{
     private static void ParseXML()
     {
         ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
+        ParseWindow.setFilePath(currentXMLFilePath);
         ParseWindow.ShowWindow();   
 
     }
-    //Validation for editing the current setup file. Stops user from editing a non-existent XML file.
-    [MenuItem("RoomAlive/Edit Setup", false)] // TODO:  Change back to true once testing is complete.
-    private static bool ParseXMLValidation()
-    {
-        return fileSetupComplete;
-    }
+    ////Validation for editing the current setup file. Stops user from editing a non-existent XML file.
+    //[MenuItem("RoomAlive/Edit Setup", false)] // TODO:  Change back to true once testing is complete.
+    //private static bool ParseXMLValidation()
+    //{
+    //    return fileSetupComplete;
+    //}
     [MenuItem("RoomAlive/Run Calibration", false, 101)]
     private static void Calibrate()
     {
