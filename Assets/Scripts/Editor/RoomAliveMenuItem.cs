@@ -39,14 +39,17 @@ public class RoomAliveMenuItem : EditorWindow{
     [MenuItem("RoomAlive/Start Kinect Server", false, 1)]
     private static void RunKinectServer()
     {
-        System.Diagnostics.Process.Start("C:\\Users\\Adam\\Desktop\\3rdYearProject\\UnityExtension\\RoomAlive\\RoomAliveToolkit-master\\ProCamCalibration\\KinectServer\\bin\\Debug\\KinectServer.exe");
+        Process process;
+        string kinectServerPath = @"C:\Users\Adam\Desktop\3rdYearProject\UnityExtension\RoomAlive\RoomAliveToolkit-master\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe";
+        StartProcess(out process, kinectServerPath,"");
     }
 
     [MenuItem("RoomAlive/Start Projector Server", false, 2)]
     private static void RunProjectorServer()
     {
-        System.Diagnostics.Process.Start("C:\\Users\\Adam\\Desktop\\3rdYearProject\\UnityExtension\\RoomAlive\\RoomAliveToolkit-master\\ProCamCalibration\\ProjectorServer\\bin\\Debug\\ProjectorServer.exe");
-
+        Process process;
+        string projectorServerPath = @"C:\Users\Adam\Desktop\3rdYearProject\UnityExtension\RoomAlive\RoomAliveToolkit-master\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe";
+        StartProcess(out process, projectorServerPath, "");
     }
 
     [MenuItem("RoomAlive/Create New Setup", false, 51)]
@@ -54,16 +57,19 @@ public class RoomAliveMenuItem : EditorWindow{
     {
         fileSetupComplete = false;
         calibrationComplete = false;
-        //Discover other Kinect Servers and Projector Servers
-        //Create XML file with modified ip address, names and display indexes.
+        Process process;
+        string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\CalibrateEnsembleViaConsole\bin\Debug\CalibrateEnsembleViaConsole";
+        StartProcess(out process, consoleApplicationPath, "create C:\\Users\\Adam\\Desktop\\3rdYearProject\\TestFolder");
         fileSetupComplete = true;
     }
 
     [MenuItem("RoomAlive/Run Calibration", false, 101)]// Requires Validation
     private static void Calibrate()
     {
-        //Run Acquire
-        //Run Solve
+        Process process;
+        string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\CalibrateEnsembleViaConsole\bin\Debug\CalibrateEnsembleViaConsole";
+        StartProcess(out process, consoleApplicationPath, "calibrate C:\\Users\\Adam\\Desktop\\3rdYearProject\\TestFolder");
+        fileSetupComplete = true;
         calibrationComplete = true;
     }
 
@@ -93,5 +99,29 @@ public class RoomAliveMenuItem : EditorWindow{
         ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
         ParseWindow.ShowWindow();
 
+    }
+
+    private static void StartProcess(out Process proc, string processPath, string args)
+    {
+        ProcessStartInfo startInfo = new ProcessStartInfo();
+        startInfo.FileName = processPath;
+        startInfo.Arguments = args;
+        //startInfo.RedirectStandardOutput = false;
+        //startInfo.RedirectStandardError = false;
+        //startInfo.UseShellExecute = false;
+        //startInfo.CreateNoWindow = true;
+        startInfo.WindowStyle = ProcessWindowStyle.Minimized;
+
+        proc = new Process();
+        proc.StartInfo = startInfo;
+        proc.EnableRaisingEvents = true;
+        try
+        {
+            proc.Start();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }
