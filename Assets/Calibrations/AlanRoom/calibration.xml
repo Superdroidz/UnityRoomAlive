@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ProjectorCameraEnsemble xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/RoomAliveToolkit">
   <cameras>
     <ProjectorCameraEnsemble.Camera>
@@ -124,24 +124,24 @@
       <cameraMatrix>
         <ValuesByColumn xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
           <d5p1:ArrayOfdouble>
-            <d5p1:double>5040.9501001866656</d5p1:double>
+            <d5p1:double>2154.3092641841768</d5p1:double>
             <d5p1:double>0</d5p1:double>
             <d5p1:double>0</d5p1:double>
           </d5p1:ArrayOfdouble>
           <d5p1:ArrayOfdouble>
             <d5p1:double>0</d5p1:double>
-            <d5p1:double>5040.9501001866656</d5p1:double>
+            <d5p1:double>2154.3092641841768</d5p1:double>
             <d5p1:double>0</d5p1:double>
           </d5p1:ArrayOfdouble>
           <d5p1:ArrayOfdouble>
-            <d5p1:double>857.12710955757359</d5p1:double>
-            <d5p1:double>105.02772549434094</d5p1:double>
+            <d5p1:double>645.86959279878579</d5p1:double>
+            <d5p1:double>-27.4520663886427</d5p1:double>
             <d5p1:double>1</d5p1:double>
           </d5p1:ArrayOfdouble>
         </ValuesByColumn>
       </cameraMatrix>
       <displayIndex>1</displayIndex>
-      <height>1024</height>
+      <height>800</height>
       <hostNameOrAddress>localhost</hostNameOrAddress>
       <lensDistortion>
         <ValuesByColumn xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
@@ -156,27 +156,27 @@
       <pose>
         <ValuesByColumn xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
           <d5p1:ArrayOfdouble>
-            <d5p1:double>-0.984978973865509</d5p1:double>
-            <d5p1:double>0.03555646538734436</d5p1:double>
-            <d5p1:double>0.16897369921207428</d5p1:double>
+            <d5p1:double>0.9973146915435791</d5p1:double>
+            <d5p1:double>-0.0079407654702663422</d5p1:double>
+            <d5p1:double>-0.07280375063419342</d5p1:double>
             <d5p1:double>0</d5p1:double>
           </d5p1:ArrayOfdouble>
           <d5p1:ArrayOfdouble>
-            <d5p1:double>0.0021044258028268814</d5p1:double>
-            <d5p1:double>-0.97602510452270508</d5p1:double>
-            <d5p1:double>0.21764817833900452</d5p1:double>
+            <d5p1:double>0.0066787269897758961</d5p1:double>
+            <d5p1:double>0.99982345104217529</d5p1:double>
+            <d5p1:double>-0.017561914399266243</d5p1:double>
             <d5p1:double>0</d5p1:double>
           </d5p1:ArrayOfdouble>
           <d5p1:ArrayOfdouble>
-            <d5p1:double>0.17266134917736053</d5p1:double>
-            <d5p1:double>0.21473446488380432</d5p1:double>
-            <d5p1:double>0.96128940582275391</d5p1:double>
+            <d5p1:double>0.07293035089969635</d5p1:double>
+            <d5p1:double>0.017028512433171272</d5p1:double>
+            <d5p1:double>0.9971916675567627</d5p1:double>
             <d5p1:double>0</d5p1:double>
           </d5p1:ArrayOfdouble>
           <d5p1:ArrayOfdouble>
-            <d5p1:double>1.3748953245023132</d5p1:double>
-            <d5p1:double>1.706675624322499</d5p1:double>
-            <d5p1:double>9.1896744531410413</d5p1:double>
+            <d5p1:double>0.10399939335848869</d5p1:double>
+            <d5p1:double>-0.083939674544793536</d5p1:double>
+            <d5p1:double>-0.14529396970984909</d5p1:double>
             <d5p1:double>1</d5p1:double>
           </d5p1:ArrayOfdouble>
         </ValuesByColumn>

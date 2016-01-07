@@ -126,7 +126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11498836, guid: 32a562cb14d94d245b362ea34ee3e9ac, type: 2}
       propertyPath: ensembleFolder
-      value: 219b
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 32a562cb14d94d245b362ea34ee3e9ac, type: 2}
@@ -144,7 +144,7 @@ GameObject:
   - 92: {fileID: 1449524131}
   - 81: {fileID: 1449524130}
   m_Layer: 0
-  m_Name: Main Canera
+  m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -189,7 +189,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 72.5
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -211,8 +211,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1449524129}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.10452847, y: 0, z: 0, w: 0.9945219}
+  m_LocalPosition: {x: 2.2, y: 3.1, z: 1.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
