@@ -58,7 +58,6 @@ public class RoomAliveMenuItem : EditorWindow{
     [MenuItem("RoomAlive/Run Calibration", false, 101)]
     private static void Calibrate()
     {
-        Process process;
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYea  rProject\RoomAliveTK\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration";
