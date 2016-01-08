@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using System.IO;
 
 public class ParseWindow : EditorWindow {
 
@@ -28,7 +29,7 @@ public class ParseWindow : EditorWindow {
         xmlFilePath = filePath;
     }
 
-    void ParseFile()
+    public void ParseFile()
     {
         doc = new XmlDocument();
         doc.Load(xmlFilePath);
@@ -95,9 +96,10 @@ public class ParseWindow : EditorWindow {
 
     public void ShowWindow()
     {
+       
         ParseWindow window = (ParseWindow)EditorWindow.GetWindow(typeof(ParseWindow)); //Creates Window;
         GUIContent titleContent = new GUIContent();
-        titleContent.text = windowTitle;
+        titleContent.text = Path.GetFileName(xmlFilePath);
         window.titleContent = titleContent;
         window.Show();
     }

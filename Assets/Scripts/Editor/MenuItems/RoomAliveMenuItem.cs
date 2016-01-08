@@ -52,18 +52,23 @@ public class RoomAliveMenuItem : EditorWindow{
         string fileName = Path.GetFileName(currentXMLFilePath);
         string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration";
         string arguments = "create " + "\"" + @folderPath + "\"" + " " + fileName;
-        UnityEngine.Debug.Log(arguments);
         Process.Start(consoleApplicationPath, arguments);
         fileSetupComplete = true;
+        displayParseWindow();
     }
 
     [MenuItem("RoomAlive/Edit Setup", false, 52)]
     private static void ParseXML()
     {
-        ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
-        ParseWindow.setFilePath(currentXMLFilePath);
-        ParseWindow.ShowWindow();   
+        displayParseWindow();
+    }
 
+    [MenuItem("RoomAlive/Load Existing Setup",false,53)]
+    private static void LoadXML()
+    {
+        currentXMLFilePath = EditorUtility.OpenFilePanel("Load Existing Setup", "", "xml");
+        displayParseWindow();
+        
     }
     ////Validation for editing the current setup file. Stops user from editing a non-existent XML file.
     //[MenuItem("RoomAlive/Edit Setup", false)] // TODO:  Change back to true once testing is complete.
@@ -104,7 +109,16 @@ public class RoomAliveMenuItem : EditorWindow{
         return calibrationComplete;
     }
 
-
+    private static void displayParseWindow()
+    {
+        if (ParseWindow == null)
+        {
+            ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
+        }
+        ParseWindow.setFilePath(currentXMLFilePath);
+        ParseWindow.ParseFile();
+        ParseWindow.ShowWindow();
+    }
 
     private static void StartProcess(out Process proc, string processPath, string args)
     {
