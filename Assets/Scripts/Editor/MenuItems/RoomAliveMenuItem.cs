@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using System.Diagnostics;
 using System;
 using System.IO;
@@ -24,6 +23,23 @@ public class RoomAliveMenuItem : EditorWindow{
     {
         string projectorServerPath = @"C:\Users\Adam\Desktop\3rdYearProject\UnityExtension\RoomAlive\RoomAliveToolkit-master\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe";
         Process.Start(projectorServerPath);
+    }
+
+    static BroadcastSender sender;
+    static BroadcastReceiver receiver;
+
+
+    [MenuItem("RoomAlive/Start Broadcast", false, 3)]
+    private static void StartBroadcast()
+    {
+        BroadcastSender.SendData();
+    }
+
+    [MenuItem("RoomAlive/ListenForBroadcast", false, 5)]
+    private static void ListenForBroadcast()
+    {
+        receiver = new BroadcastReceiver();
+        receiver.ListenForBroadcast();
     }
 
     [MenuItem("RoomAlive/Create New Setup", false, 51)]
