@@ -36,14 +36,17 @@ namespace Ensemble {
         }
 
         void SetCameraFromProjector(ProjectorData projector) {
-            // Scale z by -1 because Unity uses OpenGL convention where Camera's forward
-            // direction is negative.
-            Matrix4x4 worldToCameraMatrix = projector.pose.inverse * Matrix4x4.Scale(new Vector3(1, 1, -1));
+            Matrix4x4 worldToCameraMatrix = projector.pose.inverse;
+            worldToCameraMatrix[0, 2] = -worldToCameraMatrix[0, 2];
+            worldToCameraMatrix[2, 0] = -worldToCameraMatrix[2, 0];
+            worldToCameraMatrix = Matrix4x4.Scale(new Vector3(1, 1, -1)) * worldToCameraMatrix;
+            Debug.Log(Camera.main.worldToCameraMatrix);
             Debug.Log(worldToCameraMatrix);
             Camera.main.worldToCameraMatrix = worldToCameraMatrix;
 
             Matrix4x4 projectionMatrix = ProjectionMatrixFromCameraMatrix(
                 projector.cameraMatrix, projector.width, projector.height);
+            Debug.Log(Camera.main.projectionMatrix);
             Debug.Log(projectionMatrix);
             Camera.main.projectionMatrix = projectionMatrix;
 
