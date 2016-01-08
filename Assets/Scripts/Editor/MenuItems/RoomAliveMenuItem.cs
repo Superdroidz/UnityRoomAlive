@@ -33,8 +33,9 @@ public class RoomAliveMenuItem : EditorWindow{
         calibrationComplete = false;
         currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
-        string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\CalibrateEnsembleViaConsole\bin\Debug\CalibrateEnsembleViaConsole";
-        string arguments = "create " + "\"" + @folderPath + "\"";
+        string fileName = Path.GetFileName(currentXMLFilePath);
+        string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration";
+        string arguments = "create " + "\"" + @folderPath + "\"" + " " + fileName;
         UnityEngine.Debug.Log(arguments);
         Process.Start(consoleApplicationPath, arguments);
         fileSetupComplete = true;
@@ -58,8 +59,12 @@ public class RoomAliveMenuItem : EditorWindow{
     private static void Calibrate()
     {
         Process process;
-        string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\CalibrateEnsembleViaConsole\bin\Debug\CalibrateEnsembleViaConsole";
-        StartProcess(out process, consoleApplicationPath, "calibrate C:\\Users\\Adam\\Desktop\\3rdYearProject\\TestFolder");
+        string folderPath = Path.GetDirectoryName(currentXMLFilePath);
+        string fileName = Path.GetFileName(currentXMLFilePath);
+        string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYea  rProject\RoomAliveTK\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration";
+        string arguments = "calibrate " + "\"" + @folderPath + "\"" + " " + fileName;
+        UnityEngine.Debug.Log(arguments);
+        Process.Start(consoleApplicationPath, arguments);
         fileSetupComplete = true;
         calibrationComplete = true;
     }
