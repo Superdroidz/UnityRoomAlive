@@ -23,7 +23,7 @@ public class NetworkingMenuItem : EditorWindow {
         broadcaster.Listen();
     }
 
-    [MenuItem("Networking/Show current IP", priority = 51)]
+    [MenuItem("Networking/Show local IP", priority = 51)]
     private static void ShowCurrentIP()
     {
         Debug.Log(Network.player.ipAddress);
