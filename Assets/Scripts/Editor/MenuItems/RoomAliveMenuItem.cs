@@ -80,10 +80,12 @@ public class RoomAliveMenuItem : EditorWindow{
     [MenuItem("RoomAlive/Run Calibration", false, 101)]
     private static void Calibrate()
     {
+        UnityEngine.Debug.Log("I was herezz ??! $"); 
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
         string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
+        UnityEngine.Debug.Log(consoleApplicationPath);
         if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
@@ -95,12 +97,12 @@ public class RoomAliveMenuItem : EditorWindow{
         calibrationComplete = true;
     }
 
-    //Validation for Running a calibration. Stops user running the calibration unless a setup file has been created.
-    [MenuItem("RoomAlive/Run Calibration", false)]// TODO : Change back to true once testing is complete.
-    private static bool CalibrationValidation()
-    {
-        return fileSetupComplete;
-    }
+    ////Validation for Running a calibration. Stops user running the calibration unless a setup file has been created.
+    //[MenuItem("RoomAlive/Run Calibration", false)]// TODO : Change back to true once testing is complete.
+    //private static bool CalibrationValidation()
+    //{
+    //    return fileSetupComplete;
+    //}
     
     [MenuItem("RoomAlive/Import Room",false, 151)]
     private static void ImportRoom()
@@ -108,12 +110,12 @@ public class RoomAliveMenuItem : EditorWindow{
         EditorApplication.ExecuteMenuItem("Assets/Import New Asset...");
     }
 
-    //Validation for Importing an Object File into Unity. Stops the user from importing a room before running the calibration.
-    [MenuItem("RoomAlive/Import Room", false)] //TODO : Change back to true once testing is complete.
-    private static bool ImportRoomValidation()
-    {
-        return calibrationComplete;
-    }
+    ////Validation for Importing an Object File into Unity. Stops the user from importing a room before running the calibration.
+    //[MenuItem("RoomAlive/Import Room", false)] //TODO : Change back to true once testing is complete.
+    //private static bool ImportRoomValidation()
+    //{
+    //    return calibrationComplete;
+    //}
 
     [MenuItem("RoomAlive/Settings", false, 153)]
     private static void OpenSettings()

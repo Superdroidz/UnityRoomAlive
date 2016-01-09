@@ -108,7 +108,6 @@ public class ParseWindow : EditorWindow {
                 }
             }
             doc.Save(xmlFilePath);
-
     }
 
     public void AddKinect()

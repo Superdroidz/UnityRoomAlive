@@ -9,9 +9,9 @@ public class SettingsWindow : EditorWindow {
 
     private static string windowTitle = "RoomAlive Settings";
     private static int buttonWidth = 130;
-    private string kinectServerPath;
-    private string projectorServerPath;
-    private string consoleApplicationPath;
+    private static string kinectServerPath;
+    private static string projectorServerPath;
+    private static string consoleApplicationPath;
 
     public string KinectServerPath
     {
@@ -83,7 +83,7 @@ public class SettingsWindow : EditorWindow {
 
         //Projector Server Destination Section
         EditorGUILayout.BeginHorizontal();
-        consoleApplicationPath = EditorGUILayout.TextField("Projector Server Path: ", consoleApplicationPath);
+        consoleApplicationPath = EditorGUILayout.TextField("Console Application Path: ", consoleApplicationPath);
         if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
         {
             consoleApplicationPath = EditorUtility.OpenFilePanel("Select Console Application", "", "exe");
