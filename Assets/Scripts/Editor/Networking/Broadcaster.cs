@@ -26,19 +26,6 @@ public class Broadcaster {
         {
             Debug.Log(e.Message);
         }
-
-        // setup listener
-        try
-        {
-            if (listener == null)
-            {
-                listener = new UdpClient(PortSetup.listenerPort);
-            }
-        }
-        catch (SocketException e)
-        {
-            Debug.Log(e.Message);
-        }
     }
 
     public void BeginBroadcast()
@@ -86,6 +73,7 @@ public class Broadcaster {
     {
         try
         {
+            listener = new UdpClient(PortSetup.listenerPort);
             listener.BeginReceive(new AsyncCallback(ReceiveData), null);
         }
         catch (SocketException e)
@@ -103,5 +91,6 @@ public class Broadcaster {
             received = listener.EndReceive(result, ref receiveIPGroup);
             Debug.Log("Got ip: " + Encoding.ASCII.GetString(received));
         }
+        listener.Close();
     }
 }
