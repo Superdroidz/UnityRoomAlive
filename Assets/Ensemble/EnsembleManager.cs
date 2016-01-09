@@ -39,14 +39,15 @@ namespace Ensemble {
         void SetCameraFromProjector(ProjectorData projector) {
             // Take the inverse because we need to map projector's center to origin.
             Matrix4x4 worldToCameraMatrix = projector.pose.inverse;
+            // Reflect in z axis because worldToCameraMatrix is OpenGL convention.
+            // It uses negative z axis as the direction the camera looks in.
+            worldToCameraMatrix = Matrix4x4.Scale(new Vector3(1, 1, -1)) * worldToCameraMatrix;
             // Flip x translation, and y, z rotations to account for left-handedness
             worldToCameraMatrix[0, 3] = -worldToCameraMatrix[0, 3];
             worldToCameraMatrix[0, 1] = -worldToCameraMatrix[0, 1];
             worldToCameraMatrix[1, 0] = -worldToCameraMatrix[1, 0];
             worldToCameraMatrix[0, 2] = -worldToCameraMatrix[0, 2];
             worldToCameraMatrix[2, 0] = -worldToCameraMatrix[2, 0];
-            // Reflect in z axis to account for OpenGL convention view matrix
-            worldToCameraMatrix = Matrix4x4.Scale(new Vector3(1, 1, -1)) * worldToCameraMatrix;
             Camera.main.worldToCameraMatrix = worldToCameraMatrix;
 
             Matrix4x4 projectionMatrix = ProjectionMatrixFromCameraMatrix(
@@ -93,12 +94,14 @@ namespace Ensemble {
             //             0,  2 * fy / h,      2 * cy / h - 1,                           0,
             //             0,           0,  far / (far - near),  -near * far / (far - near),
             //             0,           0,                   -1,                           0
-            return new Matrix4x4() {
+            Matrix4x4 projectionRightHanded = new Matrix4x4() {
                 m00 = 2 * fx / w, m01 = 0, m02 = 1 - 2 * cx / w, m03 = 0,
                 m10 = 0, m11 = 2 * fy / h, m12 = 1 - 2 * cy / h, m13 = 0,
                 m20 = 0, m21 = 0,          m22 = -(far + near) / (far - near), m23 = -2 * far * near / (far - near),
                 m30 = 0, m31 = 0,          m32 = -1, m33 = 0
             };
+            return Matrix4x4.Scale(new Vector3(-1, 1, 1)) * projectionRightHanded *
+                Matrix4x4.Scale(new Vector3(-1, 1, 1));
         }
 
         public static Quaternion QuaternionFromMatrix(Matrix4x4 m) {
