@@ -38,23 +38,6 @@ public class RoomAliveMenuItem : EditorWindow{
 
     }
 
-    static BroadcastSender sender;
-    static BroadcastReceiver receiver;
-
-
-    [MenuItem("RoomAlive/Start Broadcast", false, 3)]
-    private static void StartBroadcast()
-    {
-        BroadcastSender.SendData();
-    }
-
-    [MenuItem("RoomAlive/ListenForBroadcast", false, 5)]
-    private static void ListenForBroadcast()
-    {
-        receiver = new BroadcastReceiver();
-        receiver.ListenForBroadcast();
-    }
-
     [MenuItem("RoomAlive/Create New Setup", false, 51)]
     private static void CreateSetup()
     {
