@@ -23,6 +23,7 @@ namespace Ensemble {
         }
 
         void OnDrawGizmos() {
+            DebugViewCameraCorners();
             if (CameraCornerHitPositions != null) {
                 for (int i = 0; i < CameraCornerHitPositions.Count(); i++) {
                     Gizmos.color = Color.red;
@@ -36,21 +37,21 @@ namespace Ensemble {
         }
 
         void SetCameraFromProjector(ProjectorData projector) {
+            // Take the inverse because we need to map projector's center to origin.
             Matrix4x4 worldToCameraMatrix = projector.pose.inverse;
+            // Flip x translation, and y, z rotations to account for left-handedness
+            worldToCameraMatrix[0, 3] = -worldToCameraMatrix[0, 3];
+            worldToCameraMatrix[0, 1] = -worldToCameraMatrix[0, 1];
+            worldToCameraMatrix[1, 0] = -worldToCameraMatrix[1, 0];
             worldToCameraMatrix[0, 2] = -worldToCameraMatrix[0, 2];
             worldToCameraMatrix[2, 0] = -worldToCameraMatrix[2, 0];
+            // Reflect in z axis to account for OpenGL convention view matrix
             worldToCameraMatrix = Matrix4x4.Scale(new Vector3(1, 1, -1)) * worldToCameraMatrix;
-            Debug.Log(Camera.main.worldToCameraMatrix);
-            Debug.Log(worldToCameraMatrix);
             Camera.main.worldToCameraMatrix = worldToCameraMatrix;
 
             Matrix4x4 projectionMatrix = ProjectionMatrixFromCameraMatrix(
                 projector.cameraMatrix, projector.width, projector.height);
-            Debug.Log(Camera.main.projectionMatrix);
-            Debug.Log(projectionMatrix);
             Camera.main.projectionMatrix = projectionMatrix;
-
-            DebugViewCameraCorners();
         }
 
         private void DebugViewCameraCorners() {
