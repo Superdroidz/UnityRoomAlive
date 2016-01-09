@@ -17,12 +17,19 @@ public class ParseWindow : EditorWindow {
     XmlNodeList projectorsIP;
     XmlNodeList projectorsDisplay;
 
-    
-
     XmlDocument doc;
 
-    bool open = true;
+    XmlNodeList kinectDefault;
+    XmlNodeList projectorDefault;
 
+    string newKinectsName;
+    string newKinectsIP;
+    string newProjectorsName;
+    string newProjectorsIP;
+    string newProjectorsDisplay;
+
+    bool addingKinect = false;
+    bool addingProjector = false;
 
     public void setFilePath(string filePath)
     {
@@ -45,7 +52,15 @@ public class ParseWindow : EditorWindow {
         projectorsIP = getTags(project, "hostNameOrAddress");
         projectorsDisplay = getTags(project, "displayIndex");
 
-        
+        XmlNodeList poses = doc.GetElementsByTagName("pose");
+        XmlNodeList ensemble = doc.GetElementsByTagName("ProjectorCameraEnsemble");
+        Debug.Log(poses[1].GetType());
+        Debug.Log(poses[1].Attributes[0].Name);
+        Debug.Log(poses[1].Attributes[0].InnerText);
+        Debug.Log(poses[1].Attributes[0].Prefix);
+        Debug.Log(poses[1].Attributes[0].BaseURI);
+        Debug.Log(poses[1].NamespaceURI);
+        Debug.Log(poses[1].OuterXml);
     }
 
     XmlNodeList getTags(string xml, string tag)
@@ -94,6 +109,92 @@ public class ParseWindow : EditorWindow {
 
     }
 
+    public void AddKinect()
+    {
+        XmlNodeList tempKinect = doc.GetElementsByTagName("cameras");
+        string temp = "ProjectorCameraEnsemble.Camera";
+
+        XmlNodeList ensemble = doc.GetElementsByTagName("ProjectorCameraEnsemble");
+        string nameSpace = ensemble[0].NamespaceURI;
+
+        string mainAtt = ensemble[0].Attributes[0].InnerText;
+
+        XmlElement elem = doc.CreateElement(temp, nameSpace);
+        XmlElement cal = doc.CreateElement("calibration", nameSpace);
+        XmlAttribute att = doc.CreateAttribute("i", "nil", mainAtt);
+        att.InnerText = "true";
+        cal.Attributes.Append(att);
+        XmlElement IP = doc.CreateElement("hostNameOrAddress", nameSpace);
+        IP.InnerText = newKinectsIP;
+        XmlElement name = doc.CreateElement("name", nameSpace);
+        name.InnerText = newKinectsName;
+        XmlElement pose = doc.CreateElement("pose", nameSpace);
+        att = doc.CreateAttribute("i", "nil", mainAtt);
+        att.InnerText = "true";
+        pose.Attributes.Append(att);
+        
+        elem.AppendChild(cal);
+        elem.AppendChild(IP);
+        elem.AppendChild(name);
+        elem.AppendChild(pose);
+
+        tempKinect[tempKinect.Count-1].AppendChild(elem);
+
+        doc.Save("Assets/XML File/cal.xml");
+
+    }
+    public void AddProjector()
+    {
+        XmlNodeList tempKinect = doc.GetElementsByTagName("projectors");
+        string temp = "ProjectorCameraEnsemble.Projector";
+
+        XmlNodeList ensemble = doc.GetElementsByTagName("ProjectorCameraEnsemble");
+        string nameSpace = ensemble[0].NamespaceURI;
+
+        string mainAtt = ensemble[0].Attributes[0].InnerText;
+
+        XmlElement elem = doc.CreateElement(temp, nameSpace);
+
+        XmlElement camMatrix = doc.CreateElement("cameraMatrix", nameSpace);
+        XmlAttribute att = doc.CreateAttribute("i", "nil", mainAtt);
+        att.InnerText = "true";
+        camMatrix.Attributes.Append(att);
+        XmlElement display = doc.CreateElement("displayIndex", nameSpace);
+        display.InnerText = newProjectorsDisplay;
+        XmlElement height = doc.CreateElement("height", nameSpace);
+        height.InnerText = "0";
+        XmlElement host = doc.CreateElement("hostNameOrAddress", nameSpace);
+        host.InnerText = newProjectorsIP;
+        XmlElement lensDistort = doc.CreateElement("lensDistortion", nameSpace);
+        att = doc.CreateAttribute("i", "nil", mainAtt);
+        att.InnerText = "true";
+        lensDistort.Attributes.Append(att);
+        XmlElement lockIntrinsics = doc.CreateElement("lockIntrinsics", nameSpace);
+        lockIntrinsics.InnerText = "false";
+        XmlElement name = doc.CreateElement("name", nameSpace);
+        name.InnerText = newProjectorsName;
+        XmlElement pose = doc.CreateElement("pose", nameSpace);
+        att = doc.CreateAttribute("i", "nil", mainAtt);
+        att.InnerText = "true";
+        pose.Attributes.Append(att);
+        XmlElement width = doc.CreateElement("width", nameSpace);
+        width.InnerText = "0";
+
+        elem.AppendChild(camMatrix);
+        elem.AppendChild(display);
+        elem.AppendChild(height);
+        elem.AppendChild(host);
+        elem.AppendChild(lensDistort);
+        elem.AppendChild(lockIntrinsics);
+        elem.AppendChild(name);
+        elem.AppendChild(pose);
+        elem.AppendChild(width);
+
+        tempKinect[tempKinect.Count - 1].AppendChild(elem);
+
+        doc.Save("Assets/XML File/cal.xml");
+    }
+
     public void ShowWindow()
     {
        
@@ -106,12 +207,6 @@ public class ParseWindow : EditorWindow {
 
     void OnGUI()
     {
-        
-        if (open)
-        {
-            open = false;
-            ParseFile();
-        }
         if (kinectsNames != null) {
             for (int i = 0; i < kinectsNames.Count; i++)
             {
@@ -149,6 +244,52 @@ public class ParseWindow : EditorWindow {
             {
                 SaveChanges();
             };
+
+            if (GUILayout.Button("Add Kinect", GUILayout.Width(buttonWidth)))
+            {
+                addingKinect = true;
+                addingProjector = false;
+            }
+            if (GUILayout.Button("Add Projector", GUILayout.Width(buttonWidth)))
+            {
+                addingKinect = false;
+                addingProjector = true;
+            }
+            if (addingKinect)
+            {
+
+                EditorGUILayout.BeginHorizontal();
+                newKinectsName = EditorGUILayout.TextField("New Kinect's Name: ", newKinectsName);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                newKinectsIP = EditorGUILayout.TextField("New Kinect's IP: ", newKinectsIP);
+                EditorGUILayout.EndHorizontal();
+                if (GUILayout.Button("Add", GUILayout.Width(buttonWidth)) && newKinectsName.Length > 0 && newKinectsIP.Length > 0)
+                {
+                    addingKinect = false;
+                    AddKinect();
+                    ParseFile();
+                }
+            }
+            if (addingProjector)
+            {
+
+                EditorGUILayout.BeginHorizontal();
+                newProjectorsName = EditorGUILayout.TextField("New Projector's Name: ", newProjectorsName);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                newProjectorsIP = EditorGUILayout.TextField("New Projector's IP: ", newProjectorsIP);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                newProjectorsDisplay = EditorGUILayout.TextField("New Projector's Display Index: ", newProjectorsDisplay);
+                EditorGUILayout.EndHorizontal();
+                if (GUILayout.Button("Add", GUILayout.Width(buttonWidth)) && newProjectorsName.Length > 0 && newProjectorsIP.Length > 0 && newProjectorsDisplay.Length > 0)
+                {
+                    addingProjector = false;
+                    AddProjector();
+                    ParseFile();
+                }
+            }
         
     }
 }
