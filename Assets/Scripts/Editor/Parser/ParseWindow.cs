@@ -90,7 +90,7 @@ public class ParseWindow : EditorWindow {
                     tempDisplay[i].InnerText = projectorsDisplay[i].InnerText;
                 }
             }
-            doc.Save("Assets/XML File/cal.xml");
+            doc.Save(xmlFilePath);
 
     }
 
