@@ -319,7 +319,6 @@ public class ParseWindow : EditorWindow {
                 removingKinect = false;
                 removingProjector = false;
             }
-            EditorGUILayout.Space();
             if (GUILayout.Button("Remove Kinect", GUILayout.Width(buttonWidth)))
             {
                 addingKinect = false;
@@ -337,7 +336,6 @@ public class ParseWindow : EditorWindow {
                 removingKinect = false;
                 removingProjector = false;
             }
-            EditorGUILayout.Space();
             if (GUILayout.Button("Remove Projector", GUILayout.Width(buttonWidth)))
             {
                 addingKinect = false;
