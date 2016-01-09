@@ -30,6 +30,11 @@ public class ParseWindow : EditorWindow {
 
     bool addingKinect = false;
     bool addingProjector = false;
+    bool removingKinect = false;
+    bool removingProjector = false;
+
+    int kinectNum;
+    int projectorNum;
 
     public void setFilePath(string filePath)
     {
@@ -54,13 +59,7 @@ public class ParseWindow : EditorWindow {
 
         XmlNodeList poses = doc.GetElementsByTagName("pose");
         XmlNodeList ensemble = doc.GetElementsByTagName("ProjectorCameraEnsemble");
-        Debug.Log(poses[1].GetType());
-        Debug.Log(poses[1].Attributes[0].Name);
-        Debug.Log(poses[1].Attributes[0].InnerText);
-        Debug.Log(poses[1].Attributes[0].Prefix);
-        Debug.Log(poses[1].Attributes[0].BaseURI);
-        Debug.Log(poses[1].NamespaceURI);
-        Debug.Log(poses[1].OuterXml);
+        
     }
 
     XmlNodeList getTags(string xml, string tag)
@@ -105,7 +104,7 @@ public class ParseWindow : EditorWindow {
                     tempDisplay[i].InnerText = projectorsDisplay[i].InnerText;
                 }
             }
-            doc.Save("Assets/XML File/cal.xml");
+            doc.Save(xmlFilePath);
 
     }
 
@@ -140,12 +139,19 @@ public class ParseWindow : EditorWindow {
 
         tempKinect[tempKinect.Count-1].AppendChild(elem);
 
-        doc.Save("Assets/XML File/cal.xml");
+        doc.Save(xmlFilePath);
 
+    }
+    public void RemoveKinect()
+    {
+        XmlNodeList tempKinect = doc.GetElementsByTagName("cameras");
+        tempKinect[0].RemoveChild(tempKinect[0].ChildNodes[kinectNum]);
+
+        doc.Save(xmlFilePath);
     }
     public void AddProjector()
     {
-        XmlNodeList tempKinect = doc.GetElementsByTagName("projectors");
+        XmlNodeList tempProjector = doc.GetElementsByTagName("projectors");
         string temp = "ProjectorCameraEnsemble.Projector";
 
         XmlNodeList ensemble = doc.GetElementsByTagName("ProjectorCameraEnsemble");
@@ -190,9 +196,16 @@ public class ParseWindow : EditorWindow {
         elem.AppendChild(pose);
         elem.AppendChild(width);
 
-        tempKinect[tempKinect.Count - 1].AppendChild(elem);
+        tempProjector[tempProjector.Count - 1].AppendChild(elem);
 
-        doc.Save("Assets/XML File/cal.xml");
+        doc.Save(xmlFilePath);
+    }
+    public void RemoveProjector()
+    {
+        XmlNodeList tempKinect = doc.GetElementsByTagName("projectors");
+        tempKinect[0].RemoveChild(tempKinect[0].ChildNodes[projectorNum]);
+
+        doc.Save(xmlFilePath);
     }
 
     public void ShowWindow()
@@ -249,11 +262,29 @@ public class ParseWindow : EditorWindow {
             {
                 addingKinect = true;
                 addingProjector = false;
+                removingKinect = false;
+                removingProjector = false;
+            }
+            if (GUILayout.Button("Remove Kinect", GUILayout.Width(buttonWidth)))
+            {
+                addingKinect = false;
+                addingProjector = false;
+                removingKinect = true;
+                removingProjector = false;
             }
             if (GUILayout.Button("Add Projector", GUILayout.Width(buttonWidth)))
             {
                 addingKinect = false;
                 addingProjector = true;
+                removingKinect = false;
+                removingProjector = false;
+            }
+            if (GUILayout.Button("Remove Projector", GUILayout.Width(buttonWidth)))
+            {
+                addingKinect = false;
+                addingProjector = false;
+                removingKinect = false;
+                removingProjector = true;
             }
             if (addingKinect)
             {
@@ -268,6 +299,20 @@ public class ParseWindow : EditorWindow {
                 {
                     addingKinect = false;
                     AddKinect();
+                    ParseFile();
+                }
+            }
+            if (removingKinect)
+            {
+
+                EditorGUILayout.BeginHorizontal();
+                kinectNum = int.Parse(EditorGUILayout.TextField("Remove Kinect Number: ", kinectNum+""));
+                EditorGUILayout.EndHorizontal();
+                
+                if (GUILayout.Button("Remove", GUILayout.Width(buttonWidth)) && kinectNum > 0 && kinectNum < kinectsNames.Count)
+                {
+                    removingKinect = false;
+                    RemoveKinect();
                     ParseFile();
                 }
             }
@@ -287,6 +332,20 @@ public class ParseWindow : EditorWindow {
                 {
                     addingProjector = false;
                     AddProjector();
+                    ParseFile();
+                }
+            }
+            if (removingProjector)
+            {
+
+                EditorGUILayout.BeginHorizontal();
+                projectorNum = int.Parse(EditorGUILayout.TextField("Remove Projector Number: ", projectorNum + ""));
+                EditorGUILayout.EndHorizontal();
+
+                if (GUILayout.Button("Remove", GUILayout.Width(buttonWidth)) && projectorNum < projectorsNames.Count)
+                {
+                    removingProjector = false;
+                    RemoveProjector();
                     ParseFile();
                 }
             }
