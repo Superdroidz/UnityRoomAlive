@@ -252,10 +252,10 @@ public class ParseWindow : EditorWindow {
                 if (showEachCamera[i]) {
                     EditorGUI.indentLevel++;
                 EditorGUILayout.BeginHorizontal();
-                kinectsNames[i].InnerText = EditorGUILayout.TextField("Kinect " + (i) + "'s Name: ", kinectsNames[i].InnerText);
+                kinectsNames[i].InnerText = EditorGUILayout.TextField("Name: ", kinectsNames[i].InnerText);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
-                kinectsIP[i].InnerText = EditorGUILayout.TextField("Kinect " + (i) + "'s IP: ", kinectsIP[i].InnerText);
+                kinectsIP[i].InnerText = EditorGUILayout.TextField("IP: ", kinectsIP[i].InnerText);
                 EditorGUILayout.EndHorizontal();
                 EditorGUI.indentLevel--;
             }
@@ -288,13 +288,13 @@ public class ParseWindow : EditorWindow {
                 {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.BeginHorizontal();
-                    projectorsNames[i].InnerText = EditorGUILayout.TextField("Projector " + (i) + "'s Name: ", projectorsNames[i].InnerText);
+                    projectorsNames[i].InnerText = EditorGUILayout.TextField("Name: ", projectorsNames[i].InnerText);
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.BeginHorizontal();
-                    projectorsIP[i].InnerText = EditorGUILayout.TextField("Projector " + (i) + "'s IP: ", projectorsIP[i].InnerText);
+                    projectorsIP[i].InnerText = EditorGUILayout.TextField("IP: ", projectorsIP[i].InnerText);
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.BeginHorizontal();
-                    projectorsDisplay[i].InnerText = EditorGUILayout.TextField("Projector " + (i) + "'s Display Index: ", projectorsDisplay[i].InnerText);
+                    projectorsDisplay[i].InnerText = EditorGUILayout.TextField("Display Index: ", projectorsDisplay[i].InnerText);
                     EditorGUILayout.EndHorizontal();
                     EditorGUI.indentLevel--;
                 }
@@ -348,10 +348,10 @@ public class ParseWindow : EditorWindow {
             {
 
                 EditorGUILayout.BeginHorizontal();
-                newKinectsName = EditorGUILayout.TextField("New Kinect's Name: ", newKinectsName);
+                newKinectsName = EditorGUILayout.TextField("Kinect's Name: ", newKinectsName);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
-                newKinectsIP = EditorGUILayout.TextField("New Kinect's IP: ", newKinectsIP);
+                newKinectsIP = EditorGUILayout.TextField("Kinect's IP: ", newKinectsIP);
                 EditorGUILayout.EndHorizontal();
                 if (GUILayout.Button("Add", GUILayout.Width(buttonWidth)) && newKinectsName.Length > 0 && newKinectsIP.Length > 0)
                 {
@@ -365,7 +365,7 @@ public class ParseWindow : EditorWindow {
             {
 
                 EditorGUILayout.BeginHorizontal();
-                kinectNum = int.Parse(EditorGUILayout.TextField("Remove Kinect Number: ", kinectNum+""));
+                kinectNum = int.Parse(EditorGUILayout.TextField("Kinect Number: ", kinectNum+""));
                 EditorGUILayout.EndHorizontal();
                 
                 if (GUILayout.Button("Remove", GUILayout.Width(buttonWidth)) && kinectNum > 0 && kinectNum < kinectsNames.Count)
@@ -380,13 +380,13 @@ public class ParseWindow : EditorWindow {
             {
 
                 EditorGUILayout.BeginHorizontal();
-                newProjectorsName = EditorGUILayout.TextField("New Projector's Name: ", newProjectorsName);
+                newProjectorsName = EditorGUILayout.TextField("Projector's Name: ", newProjectorsName);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
-                newProjectorsIP = EditorGUILayout.TextField("New Projector's IP: ", newProjectorsIP);
+                newProjectorsIP = EditorGUILayout.TextField("Projector's IP: ", newProjectorsIP);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
-                newProjectorsDisplay = EditorGUILayout.TextField("New Projector's Display Index: ", newProjectorsDisplay);
+                newProjectorsDisplay = EditorGUILayout.TextField("Projector's Display Index: ", newProjectorsDisplay);
                 EditorGUILayout.EndHorizontal();
                 if (GUILayout.Button("Add", GUILayout.Width(buttonWidth)) && newProjectorsName.Length > 0 && newProjectorsIP.Length > 0 && newProjectorsDisplay.Length > 0)
                 {
@@ -400,7 +400,7 @@ public class ParseWindow : EditorWindow {
             {
 
                 EditorGUILayout.BeginHorizontal();
-                projectorNum = int.Parse(EditorGUILayout.TextField("Remove Projector Number: ", projectorNum + ""));
+                projectorNum = int.Parse(EditorGUILayout.TextField("Projector Number: ", projectorNum + ""));
                 EditorGUILayout.EndHorizontal();
 
                 if (GUILayout.Button("Remove", GUILayout.Width(buttonWidth)) && projectorNum < projectorsNames.Count)
