@@ -6,6 +6,8 @@ using System.IO;
 
 public class RoomAliveMenuItem : EditorWindow{
     public static ParseWindow ParseWindow;
+    public static SettingsWindow SettingsWindow;
+
     private static string currentXMLFilePath;
 
     private static bool fileSetupComplete = false;
@@ -14,15 +16,26 @@ public class RoomAliveMenuItem : EditorWindow{
     [MenuItem("RoomAlive/Start Kinect Server", false, 1)]
     private static void RunKinectServer()
     {
-        string kinectServerPath = @"C:\Users\Adam\Desktop\3rdYearProject\UnityExtension\RoomAlive\RoomAliveToolkit-master\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe";
+        string path = Directory.GetCurrentDirectory();
+        string kinectServerPath = SettingsWindow.KinectServerPath;
+        if (kinectServerPath.Equals("") || kinectServerPath == null)
+        {
+           kinectServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe");
+        }
         Process.Start(kinectServerPath);
     }
 
     [MenuItem("RoomAlive/Start Projector Server", false, 2)]
     private static void RunProjectorServer()
     {
-        string projectorServerPath = @"C:\Users\Adam\Desktop\3rdYearProject\UnityExtension\RoomAlive\RoomAliveToolkit-master\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe";
+        string path = Directory.GetCurrentDirectory();
+        string projectorServerPath = SettingsWindow.ProjectorServerPath;
+        if (projectorServerPath.Equals("") || projectorServerPath == null)
+        {
+            projectorServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe");
+        }
         Process.Start(projectorServerPath);
+
     }
 
     static BroadcastSender sender;
@@ -48,13 +61,18 @@ public class RoomAliveMenuItem : EditorWindow{
         fileSetupComplete = false;
         calibrationComplete = false;
         currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
+
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
-        string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYearProject\RoomAliveTK\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration";
+        string path = Directory.GetCurrentDirectory();
+        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
+        if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
+        {
+            consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
+        }
         string arguments = "create " + "\"" + @folderPath + "\"" + " " + fileName;
         Process.Start(consoleApplicationPath, arguments);
         fileSetupComplete = true;
-        displayParseWindow();
     }
 
     [MenuItem("RoomAlive/Edit Setup", false, 52)]
@@ -81,7 +99,12 @@ public class RoomAliveMenuItem : EditorWindow{
     {
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
-        string consoleApplicationPath = @"C:\Users\Adam\Desktop\3rdYea  rProject\RoomAliveTK\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration";
+        string path = Directory.GetCurrentDirectory();
+        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
+        if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
+        {
+            consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
+        }
         string arguments = "calibrate " + "\"" + @folderPath + "\"" + " " + fileName;
         UnityEngine.Debug.Log(arguments);
         Process.Start(consoleApplicationPath, arguments);
@@ -109,8 +132,19 @@ public class RoomAliveMenuItem : EditorWindow{
         return calibrationComplete;
     }
 
+    [MenuItem("RoomAlive/Settings", false, 153)]
+    private static void OpenSettings()
+    {
+        if (SettingsWindow == null)
+        {
+            SettingsWindow = (SettingsWindow)ScriptableObject.CreateInstance("SettingsWindow");
+        }
+        SettingsWindow.ShowWindow();
+    }
+
     private static void displayParseWindow()
     {
+        UnityEngine.Debug.Log(currentXMLFilePath);
         if (ParseWindow == null)
         {
             ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
