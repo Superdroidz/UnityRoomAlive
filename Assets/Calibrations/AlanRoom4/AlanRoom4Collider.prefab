@@ -96,7 +96,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 459486}
   m_Layer: 0
-  m_Name: Flat v4
+  m_Name: AlanRoom4Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

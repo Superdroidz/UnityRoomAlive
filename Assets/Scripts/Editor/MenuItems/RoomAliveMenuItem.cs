@@ -133,6 +133,7 @@ public class RoomAliveMenuItem : EditorWindow{
             ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
         }
         ParseWindow.setFilePath(currentXMLFilePath);
+        ParseWindow.LoadFile();
         ParseWindow.ParseFile();
         ParseWindow.ShowWindow();
     }

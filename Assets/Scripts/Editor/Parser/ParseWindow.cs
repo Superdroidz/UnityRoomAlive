@@ -43,8 +43,6 @@ public class ParseWindow : EditorWindow {
 
     public void ParseFile()
     {
-        doc = new XmlDocument();
-        doc.Load(xmlFilePath);
 
         XmlNodeList kinects = doc.GetElementsByTagName("cameras");
         string kinect = kinects[0].OuterXml;
@@ -60,6 +58,11 @@ public class ParseWindow : EditorWindow {
         XmlNodeList poses = doc.GetElementsByTagName("pose");
         XmlNodeList ensemble = doc.GetElementsByTagName("ProjectorCameraEnsemble");
         
+    }
+    public void LoadFile()
+    {
+        doc = new XmlDocument();
+        doc.Load(xmlFilePath);
     }
 
     XmlNodeList getTags(string xml, string tag)
@@ -139,15 +142,11 @@ public class ParseWindow : EditorWindow {
 
         tempKinect[tempKinect.Count-1].AppendChild(elem);
 
-        doc.Save(xmlFilePath);
-
     }
     public void RemoveKinect()
     {
         XmlNodeList tempKinect = doc.GetElementsByTagName("cameras");
         tempKinect[0].RemoveChild(tempKinect[0].ChildNodes[kinectNum]);
-
-        doc.Save(xmlFilePath);
     }
     public void AddProjector()
     {
@@ -197,15 +196,11 @@ public class ParseWindow : EditorWindow {
         elem.AppendChild(width);
 
         tempProjector[tempProjector.Count - 1].AppendChild(elem);
-
-        doc.Save(xmlFilePath);
     }
     public void RemoveProjector()
     {
         XmlNodeList tempKinect = doc.GetElementsByTagName("projectors");
         tempKinect[0].RemoveChild(tempKinect[0].ChildNodes[projectorNum]);
-
-        doc.Save(xmlFilePath);
     }
 
     public void ShowWindow()
@@ -250,6 +245,7 @@ public class ParseWindow : EditorWindow {
 
             if (GUILayout.Button("Parse XML File", GUILayout.Width(buttonWidth)))
             {
+                LoadFile();
                 ParseFile();
             };
 
