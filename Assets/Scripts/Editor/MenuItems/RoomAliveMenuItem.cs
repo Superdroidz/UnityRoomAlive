@@ -12,6 +12,7 @@ public class RoomAliveMenuItem : EditorWindow{
 
     private static bool fileSetupComplete = false;
     private static bool calibrationComplete = false;
+    private static bool fileLoaded = false;
 
     [MenuItem("RoomAlive/Start Kinect Server", false, 1)]
     private static void RunKinectServer()
@@ -48,7 +49,7 @@ public class RoomAliveMenuItem : EditorWindow{
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
-        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
+        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath; // Catch Null Reference Exception
         if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
@@ -64,10 +65,18 @@ public class RoomAliveMenuItem : EditorWindow{
         displayParseWindow();
     }
 
+    [MenuItem("RoomAlive/Edit Setup", true)]
+    private static bool validateEditSetup()
+    {
+        return fileSetupComplete;
+    }
+
     [MenuItem("RoomAlive/Load Existing Setup",false,53)]
     private static void LoadXML()
     {
         currentXMLFilePath = EditorUtility.OpenFilePanel("Load Existing Setup", "", "xml");
+        fileSetupComplete = true;
+        fileLoaded = true;
         displayParseWindow();
         
     }
@@ -80,7 +89,8 @@ public class RoomAliveMenuItem : EditorWindow{
     [MenuItem("RoomAlive/Run Calibration", false, 101)]
     private static void Calibrate()
     {
-        UnityEngine.Debug.Log("I was herezz ??! $"); 
+        calibrationComplete = false;
+        fileSetupComplete = false;
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
@@ -97,25 +107,25 @@ public class RoomAliveMenuItem : EditorWindow{
         calibrationComplete = true;
     }
 
-    ////Validation for Running a calibration. Stops user running the calibration unless a setup file has been created.
-    //[MenuItem("RoomAlive/Run Calibration", false)]// TODO : Change back to true once testing is complete.
-    //private static bool CalibrationValidation()
-    //{
-    //    return fileSetupComplete;
-    //}
-    
-    [MenuItem("RoomAlive/Import Room",false, 151)]
+    //Validation for Running a calibration. Stops user running the calibration unless a setup file has been created.
+    [MenuItem("RoomAlive/Run Calibration", true)]// TODO : Change back to true once testing is complete.
+    private static bool CalibrationValidation()
+    {
+        return fileSetupComplete;
+    }
+
+    [MenuItem("RoomAlive/Import Room",false, 102)]
     private static void ImportRoom()
     {
         EditorApplication.ExecuteMenuItem("Assets/Import New Asset...");
     }
 
-    ////Validation for Importing an Object File into Unity. Stops the user from importing a room before running the calibration.
-    //[MenuItem("RoomAlive/Import Room", false)] //TODO : Change back to true once testing is complete.
-    //private static bool ImportRoomValidation()
-    //{
-    //    return calibrationComplete;
-    //}
+    //Validation for Importing an Object File into Unity. Stops the user from importing a room before running the calibration.
+    [MenuItem("RoomAlive/Import Room", true)] //TODO : Change back to true once testing is complete.
+    private static bool ImportRoomValidation()
+    {
+        return calibrationComplete || fileLoaded;
+    }
 
     [MenuItem("RoomAlive/Settings", false, 153)]
     private static void OpenSettings()
