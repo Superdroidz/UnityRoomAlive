@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Assets.Interop;
+using Debug = UnityEngine.Debug;
 
 namespace Assets.Parsing {
 
@@ -17,13 +18,13 @@ namespace Assets.Parsing {
             // Deserialize ensemble file
             try {
                 XNamespace ns = root.Name.Namespace;
-                Name = root.Element(ns + "Name").Value;
+                Name = root.Element(ns + "name").Value;
                 Cameras =
                     from camera in root.Descendants(ns + "ProjectorCameraEnsemble.Camera")
                     select new CameraData {
                         calibration = MakeCalibration(camera, ns),
                         hostNameOrAddress = camera.Element(ns + "hostNameOrAddress").Value,
-                        name = camera.Element(ns + "Name").Value,
+                        name = camera.Element(ns + "name").Value,
                         pose = CalibrationMatrix.ToMatrix4x4(camera.Element(ns + "pose"))
                     };
                 Projectors =
@@ -36,7 +37,7 @@ namespace Assets.Parsing {
                         hostNameOrAddress = projector.Element(ns + "hostNameOrAddress").Value,
                         lensDistortion = CalibrationMatrix.ToMatrix4x4(projector.Element(ns + "lensDistortion")),
                         lockIntrinsics = Convert.ToBoolean(projector.Element(ns + "lockIntrinsics").Value),
-                        name = projector.Element(ns + "Name").Value,
+                        name = projector.Element(ns + "name").Value,
                         pose = CalibrationMatrix.ToMatrix4x4(projector.Element(ns + "pose"))
                     };
             } catch (NullReferenceException) {
