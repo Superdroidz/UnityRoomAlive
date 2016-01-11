@@ -12,15 +12,14 @@ namespace Assets.Parsing {
         }
 
         void OnDrawGizmos() {
-            if (Projector.ProjectedPoints != null) {
-                for (int i = 0; i < Projector.ProjectedPoints.Count; i++) {
-                    Gizmos.color = Color.red;
-                    Vector3 from = Projector.ProjectedPoints[i];
-                    Vector3 to = (i + 1 != Projector.ProjectedPoints.Count) ?
+            if (Projector == null || Projector.ProjectedPoints == null) return;
+            for (int i = 0; i < Projector.ProjectedPoints.Count; i++) {
+                Gizmos.color = Color.red;
+                Vector3 from = Projector.ProjectedPoints[i];
+                Vector3 to = (i + 1 != Projector.ProjectedPoints.Count) ?
                                  Projector.ProjectedPoints[i + 1] :
                                  Projector.ProjectedPoints[0];
-                    Gizmos.DrawLine(from, to);
-                }
+                Gizmos.DrawLine(@from, to);
             }
         }
 
