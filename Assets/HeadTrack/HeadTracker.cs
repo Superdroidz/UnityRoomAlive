@@ -15,7 +15,7 @@ namespace Assets.HeadTrack {
 
         // A default position for the head, which corresponds roughly to
         // someone standing behind the Kinect, when it's placed on a table.
-        private Vector3 defaultHeadPosition = new Vector3(0f, 1.1f, -1.4f);
+        private readonly Vector3 defaultHeadPosition = new Vector3(0f, 1.1f, -1.4f);
 
         void Start() {
             headPosition = defaultHeadPosition;

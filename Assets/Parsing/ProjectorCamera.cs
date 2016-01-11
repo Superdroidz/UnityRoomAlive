@@ -5,8 +5,8 @@ using UnityEngine;
 namespace Assets.Parsing {
     public class ProjectorCamera {
 
-        public Camera CameraComponent { get; private set; }
-        public List<Vector3> ProjectedPoints { get; private set; }
+        public Camera CameraComponent { get; }
+        public List<Vector3> ProjectedPoints { get; }
         public Vector3 LOSCentre {
             get {
                 return ProjectedPoints[0] +
