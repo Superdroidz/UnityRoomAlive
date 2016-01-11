@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 441578}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AlanRoomCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ GameObject:
   - 33: {fileID: 3322902}
   - 23: {fileID: 2394870}
   - 64: {fileID: 6468456}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: camera0_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - 33: {fileID: 3327004}
   - 23: {fileID: 2351516}
   - 64: {fileID: 6403578}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: camera0_MeshPart5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 453582}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: camera0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,7 +77,7 @@ GameObject:
   - 33: {fileID: 3336028}
   - 23: {fileID: 2385102}
   - 64: {fileID: 6488642}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: camera0_MeshPart4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - 33: {fileID: 3317550}
   - 23: {fileID: 2393848}
   - 64: {fileID: 6402242}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: camera0_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   - 33: {fileID: 3388178}
   - 23: {fileID: 2334234}
   - 64: {fileID: 6432086}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: camera0_MeshPart2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - 33: {fileID: 3369884}
   - 23: {fileID: 2307012}
   - 64: {fileID: 6489708}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: camera0_MeshPart3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,10 +248,10 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 191798}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 2a66ad8454c520e41ba04c4047ec5d57, type: 2}
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -274,10 +274,10 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 181790}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 2a66ad8454c520e41ba04c4047ec5d57, type: 2}
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -300,10 +300,10 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 133462}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 2a66ad8454c520e41ba04c4047ec5d57, type: 2}
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -326,10 +326,10 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157884}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 2a66ad8454c520e41ba04c4047ec5d57, type: 2}
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -352,10 +352,10 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 174658}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 2a66ad8454c520e41ba04c4047ec5d57, type: 2}
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -378,10 +378,10 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 130802}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 2a66ad8454c520e41ba04c4047ec5d57, type: 2}
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
