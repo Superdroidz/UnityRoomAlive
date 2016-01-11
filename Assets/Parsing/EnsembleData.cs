@@ -39,7 +39,7 @@ namespace Assets.Parsing {
                         name = projector.Element(ns + "Name").Value,
                         pose = CalibrationMatrix.ToMatrix4x4(projector.Element(ns + "pose"))
                     };
-            } catch (NullReferenceException e) {
+            } catch (NullReferenceException) {
                 throw new NullReferenceException("File incorrect format.");
             }
         }
