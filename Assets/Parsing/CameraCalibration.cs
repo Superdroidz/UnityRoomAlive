@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Ensemble {
+namespace Assets.Parsing {
     public struct CameraCalibration {
         public Matrix4x4 colorCameraMatrix;
         public Matrix4x4 colorLensDistortion;

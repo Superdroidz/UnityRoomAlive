@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Ensemble {
+namespace Assets.Parsing {
     public struct CameraData {
         public CameraCalibration calibration;
         public string hostNameOrAddress;

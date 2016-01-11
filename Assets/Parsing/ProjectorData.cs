@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Ensemble {
+namespace Assets.Parsing {
     public struct ProjectorData {
         public Matrix4x4 cameraMatrix;
         public int displayIndex;
