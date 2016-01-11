@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Diagnostics;
 using System;
 using System.IO;
+using sd = System.Diagnostics;
 
 public class RoomAliveMenuItem : EditorWindow{
     public static ParseWindow ParseWindow;
@@ -14,29 +14,122 @@ public class RoomAliveMenuItem : EditorWindow{
     private static bool calibrationComplete = false;
     private static bool fileLoaded = false;
 
+    static sd.Process cameraServer, projectorServer;
+
+    static sd.Process ProcessStart(string filepath)
+    {
+        return ProcessStart(filepath, "");
+    }
+
+    static sd.Process ProcessStart(string filepath, string args)
+    {
+        /*
+        ProcessStartInfo startInfo = new ProcessStartInfo();
+        startInfo.FileName = processPath;
+        startInfo.Arguments = args;
+        //startInfo.RedirectStandardOutput = false;
+        //startInfo.RedirectStandardError = false;
+        //startInfo.UseShellExecute = false;
+        //startInfo.CreateNoWindow = true;
+        startInfo.WindowStyle = ProcessWindowStyle.Minimized;
+
+        proc = new Process();
+        proc.StartInfo = startInfo;
+        proc.EnableRaisingEvents = true;
+        try
+        {
+            proc.Start();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        */
+        return sd.Process.Start(filepath, args);
+    }
+
     [MenuItem("RoomAlive/Start Kinect Server", false, 1)]
     private static void RunKinectServer()
     {
-        string path = Directory.GetCurrentDirectory();
-        string kinectServerPath = SettingsWindow.KinectServerPath;
-        if (kinectServerPath.Equals("") || kinectServerPath == null)
+        if (cameraServer == null || cameraServer.HasExited)
         {
-           kinectServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe");
+            string path = Directory.GetCurrentDirectory();
+            string kinectServerPath = SettingsWindow.KinectServerPath;
+            if (kinectServerPath.Equals("") || kinectServerPath == null)
+            {
+               kinectServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe");
+            }
+            try
+            {
+                cameraServer = ProcessStart(kinectServerPath);
+                Debug.Log("Started Kinect server");
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Could not start Kinect server: " + e.Message);
+            }
         }
-        Process.Start(kinectServerPath);
+        else
+        {
+            Debug.Log("Kinect server is already running!");
+        }
     }
 
     [MenuItem("RoomAlive/Start Projector Server", false, 2)]
     private static void RunProjectorServer()
     {
-        string path = Directory.GetCurrentDirectory();
-        string projectorServerPath = SettingsWindow.ProjectorServerPath;
-        if (projectorServerPath.Equals("") || projectorServerPath == null)
+        if (projectorServer == null || projectorServer.HasExited)
         {
-            projectorServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe");
+            string path = Directory.GetCurrentDirectory();
+            string projectorServerPath = SettingsWindow.ProjectorServerPath;
+            if (projectorServerPath.Equals("") || projectorServerPath == null)
+            {
+                projectorServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe");
+            }
+            try
+            {
+                projectorServer = ProcessStart(projectorServerPath);
+                Debug.Log("Started projector server");
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Failed to start projector server: " + e.Message);
+            }
         }
-        Process.Start(projectorServerPath);
+        else
+        {
+            Debug.Log("Projector server is already running!");
+        }
 
+    }
+
+    [MenuItem("RoomAlive/Stop Servers", false, 3)]
+    private static void StopServers()
+    {
+        if (cameraServer != null && !cameraServer.HasExited)
+        {
+            try
+            {
+                cameraServer.Kill();
+                Debug.Log("Stopped Kinect server.");
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Could not stop the kinect server: " + e.Message);
+            }
+        }
+        if (projectorServer != null && !projectorServer.HasExited)
+        {
+            try
+            {
+                projectorServer.Kill();
+                Debug.Log("Stopped projector server.");
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Could not stop the projector server: " + e.Message);
+            }
+        }
     }
 
     [MenuItem("RoomAlive/Create New Setup", false, 51)]
@@ -45,17 +138,18 @@ public class RoomAliveMenuItem : EditorWindow{
         fileSetupComplete = false;
         calibrationComplete = false;
         currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
+        if (currentXMLFilePath.Equals("") || currentXMLFilePath == null) return;
 
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
-        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath; // Catch Null Reference Exception
+        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
         if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
         }
         string arguments = "create " + "\"" + @folderPath + "\"" + " " + fileName;
-        Process.Start(consoleApplicationPath, arguments);
+        ProcessStart(consoleApplicationPath, arguments);
         fileSetupComplete = true;
     }
 
@@ -75,6 +169,7 @@ public class RoomAliveMenuItem : EditorWindow{
     private static void LoadXML()
     {
         currentXMLFilePath = EditorUtility.OpenFilePanel("Load Existing Setup", "", "xml");
+        if (currentXMLFilePath.Equals("") || currentXMLFilePath == null) return;
         fileSetupComplete = true;
         fileLoaded = true;
         displayParseWindow();
@@ -101,8 +196,8 @@ public class RoomAliveMenuItem : EditorWindow{
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
         }
         string arguments = "calibrate " + "\"" + @folderPath + "\"" + " " + fileName;
-        UnityEngine.Debug.Log(arguments);
-        Process.Start(consoleApplicationPath, arguments);
+        Debug.Log(arguments);
+        ProcessStart(consoleApplicationPath, arguments);
         fileSetupComplete = true;
         calibrationComplete = true;
     }
@@ -132,45 +227,20 @@ public class RoomAliveMenuItem : EditorWindow{
     {
         if (SettingsWindow == null)
         {
-            SettingsWindow = (SettingsWindow)ScriptableObject.CreateInstance("SettingsWindow");
+            SettingsWindow = (SettingsWindow)CreateInstance("SettingsWindow");
         }
         SettingsWindow.ShowWindow();
     }
 
     private static void displayParseWindow()
     {
-        UnityEngine.Debug.Log(currentXMLFilePath);
         if (ParseWindow == null)
         {
-            ParseWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
+            ParseWindow = (ParseWindow)CreateInstance("ParseWindow");
         }
         ParseWindow.setFilePath(currentXMLFilePath);
         ParseWindow.LoadFile();
         ParseWindow.ParseFile();
         ParseWindow.ShowWindow();
-    }
-
-    private static void StartProcess(out Process proc, string processPath, string args)
-    {
-        ProcessStartInfo startInfo = new ProcessStartInfo();
-        startInfo.FileName = processPath;
-        startInfo.Arguments = args;
-        //startInfo.RedirectStandardOutput = false;
-        //startInfo.RedirectStandardError = false;
-        //startInfo.UseShellExecute = false;
-        //startInfo.CreateNoWindow = true;
-        startInfo.WindowStyle = ProcessWindowStyle.Minimized;
-
-        proc = new Process();
-        proc.StartInfo = startInfo;
-        proc.EnableRaisingEvents = true;
-        try
-        {
-            proc.Start();
-        }
-        catch (Exception)
-        {
-            throw;
-        }
     }
 }
