@@ -108,10 +108,12 @@ public class ParseWindow : EditorWindow {
                 if (kinectsNames[i].InnerText.Length > 0)
                 {
                     tempNames[i].InnerText = kinectsNames[i].InnerText;
+                    originalKinectsNames[i].InnerText = kinectsNames[i].InnerText;
                 }
                 if (kinectsIP[i].InnerText.Length > 0)
                 {
                     tempIP[i].InnerText = kinectsIP[i].InnerText;
+                    originalKinectsIP[i].InnerText = kinectsIP[i].InnerText;
                 }
                 count++;
             }
@@ -121,14 +123,17 @@ public class ParseWindow : EditorWindow {
                 int index = i + count;
                 if(projectorsNames[i].InnerText.Length > 0) {
                     tempNames[index+1].InnerText = projectorsNames[i].InnerText;
+                    originalProjectorsNames[i].InnerText = projectorsNames[i].InnerText;
                 }
                 if (projectorsIP[i].InnerText.Length > 0)
                 {
                     tempIP[index].InnerText = projectorsIP[i].InnerText;
+                    originalProjectorsIP[i].InnerText = projectorsIP[i].InnerText;
                 }
                 if (projectorsDisplay[i].InnerText.Length > 0)
                 {
                     tempDisplay[i].InnerText = projectorsDisplay[i].InnerText;
+                    originalProjectorsDisplay[i].InnerText = projectorsDisplay[i].InnerText;
                 }
             }
             doc.Save(xmlFilePath);
@@ -420,6 +425,7 @@ public class ParseWindow : EditorWindow {
             {
                 SaveChanges();
                 changes = false;
+            UnityEngine.Debug.Log("Changes Saved");
             };
             EditorGUILayout.Space();
             
