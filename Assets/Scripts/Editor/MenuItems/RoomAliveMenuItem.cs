@@ -190,7 +190,7 @@ public class RoomAliveMenuItem : EditorWindow{
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
         string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
-        UnityEngine.Debug.Log(consoleApplicationPath);
+        Debug.Log(consoleApplicationPath);
         if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
@@ -212,11 +212,53 @@ public class RoomAliveMenuItem : EditorWindow{
     [MenuItem("RoomAlive/Import Room",false, 102)]
     private static void ImportRoom()
     {
-        EditorApplication.ExecuteMenuItem("Assets/Import New Asset...");
+        string objectPath;
+        if (File.Exists(currentXMLFilePath))
+        {
+            string objectName = Path.GetFileNameWithoutExtension(currentXMLFilePath);
+            string objectDirectory = Path.GetDirectoryName(currentXMLFilePath);
+            objectPath = Path.Combine(objectDirectory, objectName + ".obj");
+            if (File.Exists(objectPath))
+            {
+                importAssetFromPath(objectPath);
+                return;
+            }
+        }
+
+        objectPath = EditorUtility.OpenFilePanel("Import scene object file", "", "obj");
+        if (File.Exists(objectPath))
+        {
+            importAssetFromPath(objectPath);
+            return;
+        }
+    }
+
+    static void importAssetFromPath(string path)
+    {
+        string name = Path.GetFileNameWithoutExtension(path);
+        string ext = Path.GetExtension(path);
+        string newPath = @"Assets/" + Path.GetFileName(path);
+        int index = 0;
+        while (File.Exists(newPath))
+        {
+            newPath = @"Assets/" + name + index.ToString() + ext;
+        }
+        name = name + index.ToString();
+        try
+        {
+            File.Copy(path, newPath);
+            AssetDatabase.ImportAsset(newPath);
+            var scene = AssetDatabase.LoadAssetAtPath<GameObject>(newPath);
+            Instantiate(scene);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Could not import object from path " + path + ";\n" + e.Message);
+        }
     }
 
     //Validation for Importing an Object File into Unity. Stops the user from importing a room before running the calibration.
-    [MenuItem("RoomAlive/Import Room", true)] //TODO : Change back to true once testing is complete.
+    [MenuItem("RoomAlive/Import Room", true)]
     private static bool ImportRoomValidation()
     {
         return calibrationComplete || fileLoaded;
