@@ -18,7 +18,7 @@ namespace Assets.Projection {
         }
 
         IEnumerator FindProjectorData(int projectorNumber) {
-            yield return new WaitUntil(() => EnsembleManager.Manager.data != null);
+            yield return new WaitUntil(() => EnsembleManager.Manager != null);
             ProjectorData projectorData = EnsembleManager.Manager.data.projectors.ElementAt(projectorNumber);
             Projector = new ProjectorCamera(projectorData);
         }
