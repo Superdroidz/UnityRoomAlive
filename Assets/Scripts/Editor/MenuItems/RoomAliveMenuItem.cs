@@ -238,7 +238,6 @@ public class RoomAliveMenuItem : EditorWindow{
     static void adaptXml() {
         if (File.Exists(currentXMLFilePath)) {
             GameObject managerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Parsing/EnsembleManager.prefab");
-            Debug.Log(managerPrefab);
             EnsembleManager manager = (PrefabUtility.InstantiatePrefab(managerPrefab) as GameObject).GetComponent<EnsembleManager>();
             manager.data = new EnsembleData(currentXMLFilePath);
             PrefabUtility.ReplacePrefab(manager.gameObject, managerPrefab);
