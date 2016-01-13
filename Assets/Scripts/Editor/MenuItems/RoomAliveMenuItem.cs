@@ -171,7 +171,7 @@ public class RoomAliveMenuItem : EditorWindow{
     private static void LoadXML()
     {
         currentXMLFilePath = EditorUtility.OpenFilePanel("Load Existing Setup", "", "xml");
-        if (File.Exists(currentXMLFilePath)) return;
+        if (!File.Exists(currentXMLFilePath)) return;
         fileSetupComplete = true;
         fileLoaded = true;
         displayParseWindow();
@@ -193,7 +193,7 @@ public class RoomAliveMenuItem : EditorWindow{
         string path = Directory.GetCurrentDirectory();
         string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
         Debug.Log(consoleApplicationPath);
-        if (File.Exists(consoleApplicationPath))
+        if (!File.Exists(consoleApplicationPath))
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
         }
