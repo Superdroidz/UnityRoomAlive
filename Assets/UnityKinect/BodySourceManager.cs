@@ -1,15 +1,11 @@
 ﻿using Windows.Kinect;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Assets.UnityKinect {
 
-    public class BodiesEvent : UnityEvent<Body[]> { }
-
     public class BodySourceManager : MonoBehaviour {
 
-        public static UnityEvent<Body[]> updateBodies = new BodiesEvent();
-
+        public static Body[] Bodies { get; private set; }
         private KinectSensor _Sensor;
         private BodyFrameReader _Reader;
 
@@ -29,10 +25,9 @@ namespace Assets.UnityKinect {
             if (_Reader != null) {
                 var frame = _Reader.AcquireLatestFrame();
                 if (frame != null) {
-                    Body[] bodies = new Body[_Sensor.BodyFrameSource.BodyCount];
-                    frame.GetAndRefreshBodyData(bodies);
+                    Bodies = new Body[_Sensor.BodyFrameSource.BodyCount];
+                    frame.GetAndRefreshBodyData(Bodies);
                     frame.Dispose();
-                    updateBodies.Invoke(bodies);
                 }
             }
         }
