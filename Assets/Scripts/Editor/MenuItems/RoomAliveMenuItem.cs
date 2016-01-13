@@ -136,11 +136,12 @@ public class RoomAliveMenuItem : EditorWindow{
     [MenuItem("RoomAlive/Create New Setup", false, 51)]
     private static void CreateSetup()
     {
+
         fileSetupComplete = false;
         calibrationComplete = false;
         currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
-        if (File.Exists(currentXMLFilePath)) return;
-
+        if (!File.Exists(currentXMLFilePath)) return;
+ 
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
