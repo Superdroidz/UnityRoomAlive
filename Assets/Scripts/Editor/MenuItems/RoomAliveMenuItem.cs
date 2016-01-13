@@ -56,7 +56,7 @@ public class RoomAliveMenuItem : EditorWindow{
         {
             string path = Directory.GetCurrentDirectory();
             string kinectServerPath = SettingsWindow.KinectServerPath;
-            if (kinectServerPath.Equals("") || kinectServerPath == null)
+            if (File.Exists(kinectServerPath))
             {
                kinectServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe");
             }
@@ -83,7 +83,7 @@ public class RoomAliveMenuItem : EditorWindow{
         {
             string path = Directory.GetCurrentDirectory();
             string projectorServerPath = SettingsWindow.ProjectorServerPath;
-            if (projectorServerPath.Equals("") || projectorServerPath == null)
+            if (File.Exists(projectorServerPath))
             {
                 projectorServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe");
             }
@@ -139,13 +139,13 @@ public class RoomAliveMenuItem : EditorWindow{
         fileSetupComplete = false;
         calibrationComplete = false;
         currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
-        if (currentXMLFilePath.Equals("") || currentXMLFilePath == null) return;
+        if (File.Exists(currentXMLFilePath)) return;
 
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
         string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
-        if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
+        if (File.Exists(consoleApplicationPath))
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
         }
@@ -170,7 +170,7 @@ public class RoomAliveMenuItem : EditorWindow{
     private static void LoadXML()
     {
         currentXMLFilePath = EditorUtility.OpenFilePanel("Load Existing Setup", "", "xml");
-        if (currentXMLFilePath.Equals("") || currentXMLFilePath == null) return;
+        if (File.Exists(currentXMLFilePath)) return;
         fileSetupComplete = true;
         fileLoaded = true;
         displayParseWindow();
@@ -192,7 +192,7 @@ public class RoomAliveMenuItem : EditorWindow{
         string path = Directory.GetCurrentDirectory();
         string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
         Debug.Log(consoleApplicationPath);
-        if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
+        if (File.Exists(consoleApplicationPath))
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
         }
@@ -249,8 +249,6 @@ public class RoomAliveMenuItem : EditorWindow{
         {
             File.Copy(path, newPath);
             AssetDatabase.ImportAsset(newPath);
-            var scene = AssetDatabase.LoadAssetAtPath<GameObject>(newPath);
-            Instantiate(scene);
         }
         catch (Exception e)
         {

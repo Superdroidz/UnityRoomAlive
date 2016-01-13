@@ -7,7 +7,7 @@ namespace Assets.Parsing {
         public static EnsembleData Data { get; private set; }
 
         // Use this for initialization
-        void Start() {
+        void Awake() {
             string ensembleFilePath = Application.dataPath +
                 "/Calibrations/" + ensembleFolder + "/calibration.xml";
             Data = new EnsembleData(ensembleFilePath);

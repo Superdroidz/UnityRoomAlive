@@ -54,16 +54,6 @@ public class BodySourceView_Drawing : MonoBehaviour
 	void Update ()
 	{
 
-		if (Input.GetKeyDown(KeyCode.Period))
-		{
-			print ("down: " + Time.time);
-		}
-
-		if (Input.GetKeyUp(KeyCode.Period))
-		{
-			print ("up " + Time.time);
-		}
-
 		Kinect.Body[] data = BodySourceManager.GetComponent<BodySourceManager_Drawing> ().GetData ();
 		if (data == null) return;
 
@@ -78,6 +68,11 @@ public class BodySourceView_Drawing : MonoBehaviour
 			}
 		}
 		if (trackedBody == null) return;
+
+        if (!bodyGO.activeSelf)
+        {
+            bodyGO.SetActive(true);
+        }
 
 		// Now we have found the body we wish to track
 		RefreshBodyObject (trackedBody, bodyGO);
@@ -162,6 +157,7 @@ public class BodySourceView_Drawing : MonoBehaviour
 
 		if (Input.GetKeyDown (KeyCode.Period))
 		{
+            Debug.Log("Painting");
 			brushDown = !brushDown;
 		}
 	}
@@ -184,6 +180,8 @@ public class BodySourceView_Drawing : MonoBehaviour
 			jointObj.name = jt.ToString ();
 			jointObj.transform.parent = body.transform;
 		}
+
+        body.SetActive(false);
 
 		return body;
 	}
