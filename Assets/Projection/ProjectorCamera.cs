@@ -6,7 +6,6 @@ using UnityEngine;
 namespace Assets.Projection {
     public class ProjectorCamera {
 
-        public bool done = false;
         public ProjectionRect ProjectedRect { get; private set; }
 
         public ProjectorCamera(ProjectorData projectorData) {
@@ -28,7 +27,6 @@ namespace Assets.Projection {
             Camera.main.projectionMatrix = projectionMatrix;
 
             ProjectedRect = new ProjectionRect(GetProjectedPoints());
-            done = true;
         }
 
         private List<Vector3> GetProjectedPoints() {
