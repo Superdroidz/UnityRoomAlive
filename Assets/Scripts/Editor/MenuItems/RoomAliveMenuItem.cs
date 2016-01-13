@@ -3,6 +3,7 @@ using UnityEditor;
 using System;
 using System.IO;
 using sd = System.Diagnostics;
+using Assets.Parsing;
 
 public class RoomAliveMenuItem : EditorWindow{
     public static ParseWindow ParseWindow;
@@ -231,6 +232,22 @@ public class RoomAliveMenuItem : EditorWindow{
             importAssetFromPath(objectPath);
             return;
         }
+    }
+
+    [MenuItem("RoomAlive/Adapt XML", false, 103)]
+    static void adaptXml() {
+        if (File.Exists(currentXMLFilePath)) {
+            GameObject managerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Parsing/EnsembleManager.prefab");
+            Debug.Log(managerPrefab);
+            EnsembleManager manager = (PrefabUtility.InstantiatePrefab(managerPrefab) as GameObject).GetComponent<EnsembleManager>();
+            manager.data = new EnsembleData(currentXMLFilePath);
+            PrefabUtility.ReplacePrefab(manager.gameObject, managerPrefab);
+        }
+    }
+
+    [MenuItem("RoomAlive/Adapt XML", true)]
+    static bool validateAdaptXml() {
+        return File.Exists(currentXMLFilePath);
     }
 
     static void importAssetFromPath(string path)
