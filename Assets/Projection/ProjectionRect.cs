@@ -6,7 +6,7 @@ namespace Assets.Projection {
     public class ProjectionRect {
 
         public Vector3 Centre {
-            get { return VectorMath.Midpoint(ProjectedPoints[0], ProjectedPoints[1]); }
+            get { return VectorMath.Midpoint(ProjectedPoints[0], ProjectedPoints[2]); }
         }
 
         private Vector3 Normal { get; set; }
@@ -28,6 +28,14 @@ namespace Assets.Projection {
                              ProjectedPoints[0];
                 Gizmos.DrawLine(from, to);
             }
+        }
+
+        public override string ToString() {
+            string pointStr = "";
+            foreach (var point in ProjectedPoints) {
+                pointStr += point.ToString() + "\n";
+            }
+            return pointStr;
         }
     }
 }
