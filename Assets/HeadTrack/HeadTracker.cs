@@ -1,6 +1,6 @@
 ﻿using Windows.Kinect;
 using Assets.Interop;
-using Assets.Parsing;
+using Assets.Projection;
 using Assets.UnityKinect;
 using UnityEngine;
 
@@ -9,8 +9,10 @@ namespace Assets.HeadTrack {
     [RequireComponent(typeof(Camera))]
     public class HeadTracker : MonoBehaviour {
 
-        private bool isTrackingHead = true;
+        private bool debugMode = true;
+
         private Camera user;
+        private Camera debugCamera;
         private Vector3 headPosition;
 
         // A default position for the head, which corresponds roughly to
@@ -19,19 +21,30 @@ namespace Assets.HeadTrack {
 
         void Start() {
             headPosition = defaultHeadPosition;
-            if (isTrackingHead) {
-                BodySourceManager.updateBodies.AddListener(TrackHead);
-            }
-
             user = GetComponent<Camera>();
         }
 
         void Update() {
-            user.transform.position = headPosition;
-            if (ProjectorManager.Projector != null) {
-                user.transform.LookAt(ProjectorManager.Projector.LOSCentre);
+            if (!debugMode) {
+                if (BodySourceManager.Bodies != null) {
+                    TrackHead(BodySourceManager.Bodies);
+                }
+
+                user.transform.position = headPosition;
+                if (ProjectorManager.Projector != null) {
+                    user.transform.LookAt(ProjectorManager.Projector.ProjectedRect.Centre);
+                } else {
+                    user.transform.rotation = Quaternion.LookRotation(Vector3.forward);
+                }
             } else {
-                user.transform.rotation = Quaternion.LookRotation(Vector3.forward);
+                int movementDelta = 1;
+                user.transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * movementDelta);
+                user.transform.Translate(Vector3.forward * Input.GetAxis("Vertical") * movementDelta);
+                user.transform.Translate(Vector3.up * Input.GetAxis("Up") * movementDelta);
+
+                int sensitivity = 1;
+                user.transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * sensitivity, Space.World);
+                user.transform.Rotate(Vector3.right, Input.GetAxis("Mouse Y") * sensitivity, Space.World);
             }
         }
 
