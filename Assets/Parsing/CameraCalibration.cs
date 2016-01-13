@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Parsing {
+    [Serializable]
     public struct CameraCalibration {
         public Matrix4x4 colorCameraMatrix;
         public Matrix4x4 colorLensDistortion;

@@ -3,14 +3,12 @@
 namespace Assets.Parsing {
     public class EnsembleManager : MonoBehaviour {
 
-        public string ensembleFolder;
-        public static EnsembleData Data { get; private set; }
+        public static EnsembleManager Manager { get; private set; }
 
-        // Use this for initialization
+        public EnsembleData data;
+
         void Start() {
-            string ensembleFilePath = Application.dataPath +
-                "/Calibrations/" + ensembleFolder + "/calibration.xml";
-            Data = new EnsembleData(ensembleFilePath);
+            Manager = this;
         }
     }
 }
