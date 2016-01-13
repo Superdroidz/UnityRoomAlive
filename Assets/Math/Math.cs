@@ -34,4 +34,10 @@ namespace Assets.Math {
                 Matrix4x4.Scale(new Vector3(-1, 1, 1));
         }
     }
+
+    public static class VectorMath {
+        public static Vector3 Midpoint(Vector3 v1, Vector3 v2) {
+            return v1 + 0.5f * (v2 - v1);
+        }
+    }
 }
