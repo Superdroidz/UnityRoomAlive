@@ -9,7 +9,7 @@ namespace Assets.HeadTrack {
     [RequireComponent(typeof(Camera))]
     public class HeadTracker : MonoBehaviour {
 
-        private bool debugMode = true;
+        private bool debugMode = false;
 
         private Camera user;
         private Camera debugCamera;
