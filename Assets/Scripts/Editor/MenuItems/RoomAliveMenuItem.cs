@@ -5,7 +5,8 @@ using System.IO;
 using sd = System.Diagnostics;
 
 
-public class RoomAliveMenuItem : EditorWindow{
+public class RoomAliveMenuItem : EditorWindow
+{
     public static ParseWindow ParseWindow;
     public static SettingsWindow SettingsWindow;
 
@@ -56,9 +57,9 @@ public class RoomAliveMenuItem : EditorWindow{
         {
             string path = Directory.GetCurrentDirectory();
             string kinectServerPath = SettingsWindow.KinectServerPath;
-            if (File.Exists(kinectServerPath))
+            if (!File.Exists(kinectServerPath))
             {
-               kinectServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe");
+                kinectServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe");
             }
             try
             {
@@ -83,7 +84,7 @@ public class RoomAliveMenuItem : EditorWindow{
         {
             string path = Directory.GetCurrentDirectory();
             string projectorServerPath = SettingsWindow.ProjectorServerPath;
-            if (File.Exists(projectorServerPath))
+            if (!File.Exists(projectorServerPath))
             {
                 projectorServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe");
             }
@@ -140,13 +141,13 @@ public class RoomAliveMenuItem : EditorWindow{
         fileSetupComplete = false;
         calibrationComplete = false;
         currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
-        if (!File.Exists(currentXMLFilePath)) return;
- 
+        if (currentXMLFilePath == null || currentXMLFilePath.Equals("")) return; // must check for empty string here, as file will not exist
+
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
         string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
-        if (File.Exists(consoleApplicationPath))
+        if (!File.Exists(consoleApplicationPath))
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
         }
@@ -167,7 +168,7 @@ public class RoomAliveMenuItem : EditorWindow{
         return fileSetupComplete;
     }
 
-    [MenuItem("RoomAlive/Load Existing Setup",false,53)]
+    [MenuItem("RoomAlive/Load Existing Setup", false, 53)]
     private static void LoadXML()
     {
         currentXMLFilePath = EditorUtility.OpenFilePanel("Load Existing Setup", "", "xml");
@@ -175,7 +176,7 @@ public class RoomAliveMenuItem : EditorWindow{
         fileSetupComplete = true;
         fileLoaded = true;
         displayParseWindow();
-        
+
     }
     ////Validation for editing the current setup file. Stops user from editing a non-existent XML file.
     //[MenuItem("RoomAlive/Edit Setup", false)] // TODO:  Change back to true once testing is complete.
@@ -192,13 +193,11 @@ public class RoomAliveMenuItem : EditorWindow{
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
         string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
-        Debug.Log(consoleApplicationPath);
         if (!File.Exists(consoleApplicationPath))
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
         }
         string arguments = "calibrate " + "\"" + @folderPath + "\"" + " " + fileName;
-        Debug.Log(arguments);
         ProcessStart(consoleApplicationPath, arguments);
         fileSetupComplete = true;
         calibrationComplete = true;
@@ -211,7 +210,7 @@ public class RoomAliveMenuItem : EditorWindow{
         return fileSetupComplete;
     }
 
-    [MenuItem("RoomAlive/Import Room",false, 102)]
+    [MenuItem("RoomAlive/Import Room", false, 102)]
     private static void ImportRoom()
     {
         string objectPath;

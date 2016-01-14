@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 
-public class SettingsWindow : EditorWindow {
+public class SettingsWindow : EditorWindow
+{
 
     class SettingsData
     {
@@ -104,7 +105,7 @@ public class SettingsWindow : EditorWindow {
             kinectServerPath = EditorUtility.OpenFilePanel("Select Kinect Server", "", "exe");
         }
         EditorGUILayout.EndHorizontal();
-        
+
         //Projector Server Destination Section
         EditorGUILayout.BeginHorizontal();
         projectorServerPath = EditorGUILayout.TextField("Projector Server Path: ", projectorServerPath);
