@@ -9,6 +9,8 @@ Assets/Calibrations/**/*.tiff*
 Assets/Calibrations/**/camera*.meta
 Assets/Calibrations/**/projector*.meta
 Assets/Calibrations/**/Materials.meta
+/Assets/settings.xml.meta
+/Assets/settings.xml
 
 # Unity stuff
 [Ll]ibrary/
