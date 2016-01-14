@@ -25,8 +25,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 124878}
-  m_LocalRotation: {x: 0, y: 0.36374104, z: 0, w: 0.93150014}
-  m_LocalPosition: {x: -0.819, y: -0.396, z: 1.142}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,7 +76,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56dcdb5dc81942f49b94eb923750027a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugCameraPrefab: {fileID: 2043588, guid: 3bec3392eff327f4380ff6ad0747f258, type: 2}
 --- !u!119 &11943180
 Projector:
   m_ObjectHideFlags: 1
