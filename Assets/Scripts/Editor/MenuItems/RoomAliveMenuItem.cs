@@ -55,7 +55,7 @@ public class RoomAliveMenuItem : EditorWindow{
         if (cameraServer == null || cameraServer.HasExited)
         {
             string path = Directory.GetCurrentDirectory();
-            string kinectServerPath = SettingsWindow.KinectServerPath;
+            string kinectServerPath = SettingsWindow.Settings.kinectServerPath;
             if (kinectServerPath.Equals("") || kinectServerPath == null)
             {
                kinectServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe");
@@ -82,7 +82,7 @@ public class RoomAliveMenuItem : EditorWindow{
         if (projectorServer == null || projectorServer.HasExited)
         {
             string path = Directory.GetCurrentDirectory();
-            string projectorServerPath = SettingsWindow.ProjectorServerPath;
+            string projectorServerPath = SettingsWindow.Settings.projectorServerPath;
             if (projectorServerPath.Equals("") || projectorServerPath == null)
             {
                 projectorServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe");
@@ -144,7 +144,7 @@ public class RoomAliveMenuItem : EditorWindow{
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
-        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
+        string consoleApplicationPath = SettingsWindow.Settings.consoleApplicationPath;
         if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
         {
             consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
@@ -190,7 +190,7 @@ public class RoomAliveMenuItem : EditorWindow{
         string folderPath = Path.GetDirectoryName(currentXMLFilePath);
         string fileName = Path.GetFileName(currentXMLFilePath);
         string path = Directory.GetCurrentDirectory();
-        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
+        string consoleApplicationPath = SettingsWindow.Settings.consoleApplicationPath;
         Debug.Log(consoleApplicationPath);
         if (consoleApplicationPath.Equals("") || consoleApplicationPath == null)
         {

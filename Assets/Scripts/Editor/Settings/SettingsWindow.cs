@@ -1,89 +1,32 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml;
 using System.IO;
 
 public class SettingsWindow : EditorWindow {
 
-    class SettingsData
-    {
-        private string kinectServerPath;
-        private string projectorServerPath;
-        private string consoleApplicationPath;
+    // Class for storing settings. The constructor is used in OnGUI for first
+    // initialization.
+    [Serializable]
+    public class SettingsData {
+        public string kinectServerPath;
+        public string projectorServerPath;
+        public string consoleApplicationPath;
+        public bool isTrackingHead;
 
-        public SettingsData(string kinectPath, string projectorPath, string consolePath)
-        {
-            kinectServerPath = kinectPath;
-            projectorServerPath = projectorPath;
-            consoleApplicationPath = consolePath;
+        public SettingsData() {
+            kinectServerPath = "";
+            projectorServerPath = "";
+            consoleApplicationPath = "";
+            isTrackingHead = false;
         }
     }
 
     private static string windowTitle = "RoomAlive Settings";
     private static int buttonWidth = 130;
-    private static string kinectServerPath;
-    private static string projectorServerPath;
-    private static string consoleApplicationPath;
     private static string settingsFilePath = Application.dataPath + "/settings.xml";
-    private XmlDocument settings;
 
-    public string KinectServerPath
-    {
-        get
-        {
-            return kinectServerPath;
-        }
-
-        set
-        {
-            kinectServerPath = value;
-        }
-    }
-
-    public string ProjectorServerPath
-    {
-        get
-        {
-            return projectorServerPath;
-        }
-
-        set
-        {
-            projectorServerPath = value;
-        }
-    }
-
-    public string ConsoleApplicationPath
-    {
-        get
-        {
-            return consoleApplicationPath;
-        }
-
-        set
-        {
-            consoleApplicationPath = value;
-        }
-    }
-
-    private void LoadSettings()
-    {
-        if (File.Exists(settingsFilePath))
-        {
-            settings = new XmlDocument();
-
-            settings.Load(settingsFilePath);
-
-            kinectServerPath = settings.GetElementsByTagName("KinectPath")[0].InnerText;
-            projectorServerPath = settings.GetElementsByTagName("ProjectorPath")[0].InnerText;
-            consoleApplicationPath = settings.GetElementsByTagName("ConsoleApplication")[0].InnerText;
-        }
-        else
-        {
-        }
-    }
+    public static SettingsData Settings { get; private set; }
 
     public void ShowWindow()
     {
@@ -96,60 +39,47 @@ public class SettingsWindow : EditorWindow {
 
     void OnGUI()
     {
+        if (Settings == null) {
+            Settings = new SettingsData();
+        }
+
         //Kinect Server Destination Section
         EditorGUILayout.BeginHorizontal();
-        kinectServerPath = EditorGUILayout.TextField("Kinect Server Path: ", kinectServerPath);
+        Settings.kinectServerPath = EditorGUILayout.TextField("Kinect Server Path: ", Settings.kinectServerPath);
         if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
         {
-            kinectServerPath = EditorUtility.OpenFilePanel("Select Kinect Server", "", "exe");
+            Settings.kinectServerPath = EditorUtility.OpenFilePanel("Select Kinect Server", "", "exe");
         }
         EditorGUILayout.EndHorizontal();
         
         //Projector Server Destination Section
         EditorGUILayout.BeginHorizontal();
-        projectorServerPath = EditorGUILayout.TextField("Projector Server Path: ", projectorServerPath);
+        Settings.projectorServerPath = EditorGUILayout.TextField("Projector Server Path: ", Settings.projectorServerPath);
         if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
         {
-            projectorServerPath = EditorUtility.OpenFilePanel("Select Projector Server", "", "exe");
+            Settings.projectorServerPath = EditorUtility.OpenFilePanel("Select Projector Server", "", "exe");
         }
         EditorGUILayout.EndHorizontal();
 
         //Projector Server Destination Section
         EditorGUILayout.BeginHorizontal();
-        consoleApplicationPath = EditorGUILayout.TextField("Console Application Path: ", consoleApplicationPath);
+        Settings.consoleApplicationPath = EditorGUILayout.TextField("Console Application Path: ", Settings.consoleApplicationPath);
         if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
         {
-            consoleApplicationPath = EditorUtility.OpenFilePanel("Select Console Application", "", "exe");
+            Settings.consoleApplicationPath = EditorUtility.OpenFilePanel("Select Console Application", "", "exe");
         }
+        EditorGUILayout.EndHorizontal();
+
+        //Whether to use head tracking Section
+        EditorGUILayout.BeginHorizontal();
+        Settings.isTrackingHead = EditorGUILayout.Toggle("Use head tracking: ", Settings.isTrackingHead);
         EditorGUILayout.EndHorizontal();
 
         //Saving settings to XML Button
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Save Settings", GUILayout.Width(buttonWidth)))
         {
-            SettingsData settings = new SettingsData(kinectServerPath, kinectServerPath, consoleApplicationPath);
-
-            XmlWriterSettings XMLsettings = new XmlWriterSettings();
-            XMLsettings.Indent = true;
-
-            using (FileStream fileStream = new FileStream(settingsFilePath, FileMode.Create))
-            using (StreamWriter sw = new StreamWriter(fileStream))
-            using (XmlTextWriter writer = new XmlTextWriter(sw))
-            {
-                writer.Formatting = Formatting.Indented;
-                writer.Indentation = 4;
-
-                UnityEngine.Debug.Log("Got to save the file");
-                writer.WriteStartDocument();
-                writer.WriteStartElement("Settings");
-
-                writer.WriteElementString("KinectPath", kinectServerPath);
-                writer.WriteElementString("ProjectorPath", projectorServerPath);
-                writer.WriteElementString("ConsoleApplication", consoleApplicationPath);
-
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-            }
+            SaveSettings();
         }
 
         //Loading settings from file
@@ -161,4 +91,20 @@ public class SettingsWindow : EditorWindow {
         EditorGUILayout.EndHorizontal();
     }
 
+    // Save settings to a JSON file
+    private void SaveSettings()
+    {
+        string serializedSettings = JsonUtility.ToJson(Settings);
+        File.WriteAllText(settingsFilePath, serializedSettings);
+    }
+
+    // Load settings from a JSON file
+    private void LoadSettings()
+    {
+        if (File.Exists(settingsFilePath))
+        {
+            string settingsText = File.ReadAllText(settingsFilePath);
+            Settings = JsonUtility.FromJson<SettingsData>(settingsText);
+        }
+    }
 }
