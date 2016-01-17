@@ -5,6 +5,8 @@ using System.IO;
 
 public class SettingsWindow : EditorWindow {
 
+    // Class for storing settings. The constructor is used in OnGUI for first
+    // initialization.
     [Serializable]
     public class SettingsData {
         public string kinectServerPath;
