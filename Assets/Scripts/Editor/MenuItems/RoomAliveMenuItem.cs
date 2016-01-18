@@ -2,10 +2,37 @@
 using UnityEditor;
 using System;
 using System.IO;
+using System.Linq;
 using sd = System.Diagnostics;
 using Assets.Parsing;
 
 public class RoomAliveMenuItem : EditorWindow{
+
+    // Class for setting up the scene, as well as verifying required prefabs
+    // exist for doing so.
+    class SceneSetup {
+
+        private static string[] managerPrefabFilters = {
+            "EnsembleManager t:GameObject",
+            "ProjectorManager t:GameObject"
+        };
+        private static string headTrackerPrefabFilter = "HeadTracker t:prefab";
+
+        public static void SetupScene() {
+            foreach (string managerPrefabFilter in managerPrefabFilters) {
+                InstantiatePrefabFromFilter(managerPrefabFilter);
+            }
+            if (SettingsWindow.Settings.isTrackingHead) {
+                InstantiatePrefabFromFilter(headTrackerPrefabFilter);
+            }
+        }
+
+        public static bool DoPrefabsExist() {
+            return managerPrefabFilters.All(filter => AssetDatabase.FindAssets(filter).Count() > 0) &&
+                   (!SettingsWindow.Settings.isTrackingHead || AssetDatabase.FindAssets(headTrackerPrefabFilter).Count() > 0);
+        }
+    }
+
     public static ParseWindow ParseWindow;
     public static SettingsWindow SettingsWindow;
 
@@ -234,19 +261,33 @@ public class RoomAliveMenuItem : EditorWindow{
         }
     }
 
-    [MenuItem("RoomAlive/Adapt XML", false, 103)]
-    static void adaptXml() {
+    [MenuItem("RoomAlive/Create Prefabs", false, 103)]
+    private static void createPrefabs() {
         if (File.Exists(currentXMLFilePath)) {
-            GameObject managerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Parsing/EnsembleManager.prefab");
-            EnsembleManager manager = (PrefabUtility.InstantiatePrefab(managerPrefab) as GameObject).GetComponent<EnsembleManager>();
+            string ensembleManagerPath = "Assets/Parsing/EnsembleManager.prefab";
+            GameObject managerInstance = InstantiatePrefabFromPath(ensembleManagerPath);
+            EnsembleManager manager = managerInstance.GetComponent<EnsembleManager>();
             manager.data = new EnsembleData(currentXMLFilePath);
+
+            GameObject managerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ensembleManagerPath);
             PrefabUtility.ReplacePrefab(manager.gameObject, managerPrefab);
+            Destroy(manager);
         }
     }
 
-    [MenuItem("RoomAlive/Adapt XML", true)]
-    static bool validateAdaptXml() {
+    [MenuItem("RoomAlive/Create Prefabs", true)]
+    static bool validateCreatePrefabs() {
         return File.Exists(currentXMLFilePath);
+    }
+
+    [MenuItem("RoomAlive/Instantiate Prefabs", false, 104)]
+    static void instantiatePrefabs() {
+        SceneSetup.SetupScene();
+    }
+
+    [MenuItem("RoomAlive/Instantiate Prefabs", true)]
+    static bool validateInstantiatePrefabs() {
+        return SceneSetup.DoPrefabsExist();
     }
 
     static void importAssetFromPath(string path)
@@ -300,5 +341,16 @@ public class RoomAliveMenuItem : EditorWindow{
         ParseWindow.LoadFile();
         ParseWindow.ParseFile();
         ParseWindow.ShowWindow();
+    }
+
+    private static GameObject InstantiatePrefabFromFilter(string prefabFilter) {
+        GameObject instance = null;
+        string[] paths = AssetDatabase.FindAssets(prefabFilter);
+        if (paths.Count() > 0) {
+            var path = paths[0]; // Could put a check to make sure only one prefab exists.
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+        }
+        return instance;
     }
 }
