@@ -9,6 +9,7 @@ public class SettingsWindow : EditorWindow {
     // initialization.
     [Serializable]
     public class SettingsData {
+
         public string kinectServerPath;
         public string projectorServerPath;
         public string consoleApplicationPath;
