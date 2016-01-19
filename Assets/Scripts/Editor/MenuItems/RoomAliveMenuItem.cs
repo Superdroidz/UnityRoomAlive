@@ -13,6 +13,7 @@ public class RoomAliveMenuItem : EditorWindow{
     class SceneSetup {
 
         private static string[] managerPrefabFilters = {
+            "BodySourceManager t:GameObject",
             "EnsembleManager t:GameObject",
             "ProjectorManager t:GameObject"
         };
