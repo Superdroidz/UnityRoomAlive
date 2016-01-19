@@ -22,14 +22,15 @@ public class RoomAliveMenuItem : EditorWindow{
             foreach (string managerPrefabFilter in managerPrefabFilters) {
                 InstantiatePrefabFromFilter(managerPrefabFilter);
             }
-            if (SettingsWindow.Settings.isTrackingHead) {
+            if (SettingsWindow.Settings != null && SettingsWindow.Settings.isTrackingHead) {
                 InstantiatePrefabFromFilter(headTrackerPrefabFilter);
             }
         }
 
         public static bool DoPrefabsExist() {
             return managerPrefabFilters.All(filter => AssetDatabase.FindAssets(filter).Count() > 0) &&
-                   (!SettingsWindow.Settings.isTrackingHead || AssetDatabase.FindAssets(headTrackerPrefabFilter).Count() > 0);
+                   (SettingsWindow.Settings == null || !SettingsWindow.Settings.isTrackingHead ||
+                    AssetDatabase.FindAssets(headTrackerPrefabFilter).Count() > 0);
         }
     }
 
@@ -264,8 +265,8 @@ public class RoomAliveMenuItem : EditorWindow{
     [MenuItem("RoomAlive/Create Prefabs", false, 103)]
     private static void createPrefabs() {
         if (File.Exists(currentXMLFilePath)) {
-            string ensembleManagerPath = "Assets/Parsing/EnsembleManager.prefab";
-            GameObject managerInstance = InstantiatePrefabFromPath(ensembleManagerPath);
+            string ensembleManagerPath = "EnsembleManager t:GameObject";
+            GameObject managerInstance = InstantiatePrefabFromFilter(ensembleManagerPath);
             EnsembleManager manager = managerInstance.GetComponent<EnsembleManager>();
             manager.data = new EnsembleData(currentXMLFilePath);
 
@@ -345,9 +346,9 @@ public class RoomAliveMenuItem : EditorWindow{
 
     private static GameObject InstantiatePrefabFromFilter(string prefabFilter) {
         GameObject instance = null;
-        string[] paths = AssetDatabase.FindAssets(prefabFilter);
-        if (paths.Count() > 0) {
-            var path = paths[0]; // Could put a check to make sure only one prefab exists.
+        string[] guids = AssetDatabase.FindAssets(prefabFilter);
+        if (guids.Count() > 0) {
+            var path = AssetDatabase.GUIDToAssetPath(guids[0]); // Could put a check to make sure only one prefab exists.
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
         }
