@@ -266,14 +266,16 @@ public class RoomAliveMenuItem : EditorWindow{
     [MenuItem("RoomAlive/Create Prefabs", false, 103)]
     private static void createPrefabs() {
         if (File.Exists(currentXMLFilePath)) {
-            string ensembleManagerPath = "EnsembleManager t:GameObject";
-            GameObject managerInstance = InstantiatePrefabFromFilter(ensembleManagerPath);
+            string ensembleManagerFilter = "EnsembleManager t:GameObject";
+            GameObject managerInstance = InstantiatePrefabFromFilter(ensembleManagerFilter);
             EnsembleManager manager = managerInstance.GetComponent<EnsembleManager>();
             manager.data = new EnsembleData(currentXMLFilePath);
 
+            var guids = AssetDatabase.FindAssets(ensembleManagerFilter);
+            string ensembleManagerPath = AssetDatabase.GUIDToAssetPath(guids[0]);
             GameObject managerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ensembleManagerPath);
             PrefabUtility.ReplacePrefab(manager.gameObject, managerPrefab);
-            Destroy(manager);
+            DestroyImmediate(manager.gameObject);
         }
     }
 
