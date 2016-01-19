@@ -2,7 +2,6 @@
 using UnityEditor;
 using System;
 using System.IO;
-using sd = System.Diagnostics;
 
 
 public class RoomAliveMenuItem : EditorWindow
@@ -10,160 +9,57 @@ public class RoomAliveMenuItem : EditorWindow
     public static ParseWindow ParseWindow;
     public static SettingsWindow SettingsWindow;
 
-    private static string currentXMLFilePath;
+    static ITKWrapper wrapper = new RoomAliveWrapper();
+    static string currentXMLFilePath;
 
-    private static bool fileSetupComplete = false;
-    private static bool calibrationComplete = false;
-    private static bool fileLoaded = false;
-
-    static sd.Process cameraServer, projectorServer;
-
-    static sd.Process ProcessStart(string filepath)
-    {
-        return ProcessStart(filepath, "");
-    }
-
-    static sd.Process ProcessStart(string filepath, string args)
-    {
-        /*
-        ProcessStartInfo startInfo = new ProcessStartInfo();
-        startInfo.FileName = processPath;
-        startInfo.Arguments = args;
-        //startInfo.RedirectStandardOutput = false;
-        //startInfo.RedirectStandardError = false;
-        //startInfo.UseShellExecute = false;
-        //startInfo.CreateNoWindow = true;
-        startInfo.WindowStyle = ProcessWindowStyle.Minimized;
-
-        proc = new Process();
-        proc.StartInfo = startInfo;
-        proc.EnableRaisingEvents = true;
-        try
-        {
-            proc.Start();
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-        */
-        return sd.Process.Start(filepath, args);
-    }
+    static bool fileSetupComplete;
+    static bool calibrationComplete;
+    static bool fileLoaded;
 
     [MenuItem("RoomAlive/Start Kinect Server", false, 1)]
     private static void RunKinectServer()
     {
-        if (cameraServer == null || cameraServer.HasExited)
-        {
-            string path = Directory.GetCurrentDirectory();
-            string kinectServerPath = SettingsWindow.KinectServerPath;
-            if (!File.Exists(kinectServerPath))
-            {
-                kinectServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\KinectServer\bin\Debug\KinectServer.exe");
-            }
-            try
-            {
-                cameraServer = ProcessStart(kinectServerPath);
-                Debug.Log("Started Kinect server");
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Could not start Kinect server: " + e.Message);
-            }
-        }
-        else
-        {
-            Debug.Log("Kinect server is already running!");
-        }
+        wrapper.StartCameraServer();
     }
 
     [MenuItem("RoomAlive/Start Projector Server", false, 2)]
     private static void RunProjectorServer()
     {
-        if (projectorServer == null || projectorServer.HasExited)
-        {
-            string path = Directory.GetCurrentDirectory();
-            string projectorServerPath = SettingsWindow.ProjectorServerPath;
-            if (!File.Exists(projectorServerPath))
-            {
-                projectorServerPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ProjectorServer\bin\Debug\ProjectorServer.exe");
-            }
-            try
-            {
-                projectorServer = ProcessStart(projectorServerPath);
-                Debug.Log("Started projector server");
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Failed to start projector server: " + e.Message);
-            }
-        }
-        else
-        {
-            Debug.Log("Projector server is already running!");
-        }
-
+        wrapper.StartProjectorServer();
     }
 
     [MenuItem("RoomAlive/Stop Servers", false, 3)]
     private static void StopServers()
     {
-        if (cameraServer != null && !cameraServer.HasExited)
-        {
-            try
-            {
-                cameraServer.Kill();
-                Debug.Log("Stopped Kinect server.");
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Could not stop the kinect server: " + e.Message);
-            }
-        }
-        if (projectorServer != null && !projectorServer.HasExited)
-        {
-            try
-            {
-                projectorServer.Kill();
-                Debug.Log("Stopped projector server.");
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Could not stop the projector server: " + e.Message);
-            }
-        }
+        wrapper.StopServers();
+    }
+
+    [MenuItem("RoomAlive/Stop Servers", true)]
+    private static bool ValidateStopServers()
+    {
+        return wrapper.ServersAreRunning();
     }
 
     [MenuItem("RoomAlive/Create New Setup", false, 51)]
     private static void CreateSetup()
     {
-
         fileSetupComplete = false;
         calibrationComplete = false;
         currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
         if (currentXMLFilePath == null || currentXMLFilePath.Equals("")) return; // must check for empty string here, as file will not exist
 
-        string folderPath = Path.GetDirectoryName(currentXMLFilePath);
-        string fileName = Path.GetFileName(currentXMLFilePath);
-        string path = Directory.GetCurrentDirectory();
-        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
-        if (!File.Exists(consoleApplicationPath))
-        {
-            consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
-        }
-        string arguments = "create " + "\"" + @folderPath + "\"" + " " + fileName;
-        ProcessStart(consoleApplicationPath, arguments);
+        wrapper.CreateNewSetup(currentXMLFilePath);
         fileSetupComplete = true;
     }
 
     [MenuItem("RoomAlive/Edit Setup", false, 52)]
     private static void ParseXML()
     {
-        displayParseWindow();
+        DisplayParseWindow();
     }
 
     [MenuItem("RoomAlive/Edit Setup", true)]
-    private static bool validateEditSetup()
+    private static bool ValidateEditSetup()
     {
         return fileSetupComplete;
     }
@@ -175,7 +71,7 @@ public class RoomAliveMenuItem : EditorWindow
         if (!File.Exists(currentXMLFilePath)) return;
         fileSetupComplete = true;
         fileLoaded = true;
-        displayParseWindow();
+        DisplayParseWindow();
 
     }
     ////Validation for editing the current setup file. Stops user from editing a non-existent XML file.
@@ -189,16 +85,7 @@ public class RoomAliveMenuItem : EditorWindow
     {
         calibrationComplete = false;
         fileSetupComplete = false;
-        string folderPath = Path.GetDirectoryName(currentXMLFilePath);
-        string fileName = Path.GetFileName(currentXMLFilePath);
-        string path = Directory.GetCurrentDirectory();
-        string consoleApplicationPath = SettingsWindow.ConsoleApplicationPath;
-        if (!File.Exists(consoleApplicationPath))
-        {
-            consoleApplicationPath = Path.Combine(path, @"RoomAlive\ProCamCalibration\ConsoleCalibration\bin\Debug\ConsoleCalibration");
-        }
-        string arguments = "calibrate " + "\"" + @folderPath + "\"" + " " + fileName;
-        ProcessStart(consoleApplicationPath, arguments);
+        wrapper.RunCalibration(currentXMLFilePath);
         fileSetupComplete = true;
         calibrationComplete = true;
     }
@@ -216,12 +103,12 @@ public class RoomAliveMenuItem : EditorWindow
         string objectPath;
         if (File.Exists(currentXMLFilePath))
         {
-            string objectName = Path.GetFileNameWithoutExtension(currentXMLFilePath);
-            string objectDirectory = Path.GetDirectoryName(currentXMLFilePath);
+            var objectName = Path.GetFileNameWithoutExtension(currentXMLFilePath);
+            var objectDirectory = Path.GetDirectoryName(currentXMLFilePath);
             objectPath = Path.Combine(objectDirectory, objectName + ".obj");
             if (File.Exists(objectPath))
             {
-                importAssetFromPath(objectPath);
+                ImportAssetFromPath(objectPath);
                 return;
             }
         }
@@ -229,17 +116,17 @@ public class RoomAliveMenuItem : EditorWindow
         objectPath = EditorUtility.OpenFilePanel("Import scene object file", "", "obj");
         if (File.Exists(objectPath))
         {
-            importAssetFromPath(objectPath);
+            ImportAssetFromPath(objectPath);
             return;
         }
     }
 
-    static void importAssetFromPath(string path)
+    static void ImportAssetFromPath(string path)
     {
-        string name = Path.GetFileNameWithoutExtension(path);
-        string ext = Path.GetExtension(path);
-        string newPath = @"Assets/" + Path.GetFileName(path);
-        int index = 0;
+        var name = Path.GetFileNameWithoutExtension(path);
+        var ext = Path.GetExtension(path);
+        var newPath = @"Assets/" + Path.GetFileName(path);
+        var index = 0;
         while (File.Exists(newPath))
         {
             newPath = @"Assets/" + name + index.ToString() + ext;
@@ -273,15 +160,22 @@ public class RoomAliveMenuItem : EditorWindow
         SettingsWindow.ShowWindow();
     }
 
-    private static void displayParseWindow()
+    private static void DisplayParseWindow()
     {
         if (ParseWindow == null)
         {
             ParseWindow = (ParseWindow)CreateInstance("ParseWindow");
         }
-        ParseWindow.setFilePath(currentXMLFilePath);
-        ParseWindow.LoadFile();
-        ParseWindow.ParseFile();
-        ParseWindow.ShowWindow();
+        try
+        {
+            ParseWindow.setFilePath(currentXMLFilePath);
+            ParseWindow.LoadFile();
+            ParseWindow.ParseFile();
+            ParseWindow.ShowWindow();
+        }
+        catch (FileNotFoundException)
+        {
+            Debug.LogError("No XML file found at filepath " + currentXMLFilePath);
+        }
     }
 }
