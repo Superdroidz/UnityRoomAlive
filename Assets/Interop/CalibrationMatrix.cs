@@ -12,6 +12,7 @@ namespace Assets.Interop {
                 from column in matrixNode.Elements().ElementAt(0).Elements()
                 select ParseColumn(column);
 
+
             // copy the columns over into Unity's matrix data structure
             Matrix4x4 matrix = Matrix4x4.zero;
             for (int index = 0; index < 4; index++) {

@@ -6,8 +6,6 @@ using System.Xml;
 using System.IO;
 
 public class ParseWindow : EditorWindow {
-
-    private static string windowTitle = "XML File";
     private static int buttonWidth = 130;
     private string xmlFilePath;
 
@@ -72,8 +70,8 @@ public class ParseWindow : EditorWindow {
         originalProjectorsIP = getTags(project, "hostNameOrAddress");
         originalProjectorsDisplay = getTags(project, "displayIndex");
 
-        XmlNodeList poses = doc.GetElementsByTagName("pose");
-        XmlNodeList ensemble = doc.GetElementsByTagName("ProjectorCameraEnsemble");
+        //XmlNodeList poses = doc.GetElementsByTagName("pose");
+        //XmlNodeList ensemble = doc.GetElementsByTagName("ProjectorCameraEnsemble");
 
         kinectsNames = getTags(kinect, "name"); ;
         kinectsIP = getTags(kinect, "hostNameOrAddress"); ;
@@ -234,7 +232,7 @@ public class ParseWindow : EditorWindow {
     public void ShowWindow()
     {
        
-        ParseWindow window = (ParseWindow)EditorWindow.GetWindow(typeof(ParseWindow)); //Creates Window;
+        ParseWindow window = (ParseWindow)GetWindow(typeof(ParseWindow)); //Creates Window;
         GUIContent titleContent = new GUIContent();
         titleContent.text = Path.GetFileName(xmlFilePath);
         window.titleContent = titleContent;

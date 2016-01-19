@@ -11,10 +11,13 @@ Assets/Calibrations/**/projector*.meta
 Assets/Calibrations/**/Materials.meta
 /Assets/settings.xml.meta
 /Assets/settings.xml
+*.obj
 
 # Unity stuff
 [Ll]ibrary/
 [Tt]emp/
+[Bb]uild/
+[Cc]alibrations/
 
 # Visual Studio Stuff
 .vs/
