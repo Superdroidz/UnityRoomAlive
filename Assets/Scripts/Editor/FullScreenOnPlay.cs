@@ -43,7 +43,7 @@ public class FullScreenOnPlay : MonoBehaviour
 
         EditorWindow gameView = GetMainGameView();
 
-        gameView.title = "Game (Stereo)";
+        gameView.titleContent.text = "Game (Stereo)";
         Rect newPos = new Rect(0, 0 - tabHeight, Screen.currentResolution.width, Screen.currentResolution.height + tabHeight);
 
         gameView.position = newPos;
