@@ -14,7 +14,12 @@ public class RoomAliveWrapper : ITKWrapper
     string filenameFlag = " -f";
     string directoryFlag = " -d";
 
-    SD.Process ProcessStart(string filepath, string args="", bool isMainConsole=false)
+    /*
+    * Starts a process from filepath, with args.
+    *
+    * If redirectOutput is true, redirects stdout and stderr to Debug.Log and Debug.Error.
+    */
+    SD.Process ProcessStart(string filepath, string args="", bool redirectOutput=false)
     {
         var startInfo = new SD.ProcessStartInfo
         {
@@ -30,7 +35,7 @@ public class RoomAliveWrapper : ITKWrapper
         };
 
 
-        if (isMainConsole)
+        if (redirectOutput)
         {
             //redirect console output
             startInfo.RedirectStandardOutput = true;
@@ -46,7 +51,7 @@ public class RoomAliveWrapper : ITKWrapper
         try
         {
             process.Start();
-            if (isMainConsole)
+            if (redirectOutput)
             {
                 //attach console output readers
                 mainProcessIsRunning = true;
@@ -63,13 +68,13 @@ public class RoomAliveWrapper : ITKWrapper
         }
     }
 
-    void ReadProcessOutputEventHandler(object sender, SD.DataReceivedEventArgs e)
+    static void ReadProcessOutputEventHandler(object sender, SD.DataReceivedEventArgs e)
     {
         if (e.Data == null) return;
         Debug.Log(e.Data);
     }
 
-    void ReadProcessErrorEventHandler(object sender, SD.DataReceivedEventArgs e)
+    static void ReadProcessErrorEventHandler(object sender, SD.DataReceivedEventArgs e)
     {
         if (e.Data == null) return;
         Debug.LogError(e.Data);
