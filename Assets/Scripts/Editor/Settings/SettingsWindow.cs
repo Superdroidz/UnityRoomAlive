@@ -9,16 +9,17 @@ public class SettingsWindow : EditorWindow {
     // initialization.
     [Serializable]
     public class SettingsData {
-        public string kinectServerPath;
-        public string projectorServerPath;
-        public string consoleApplicationPath;
-        public bool isTrackingHead;
+        public string KinectServerPath;
+        public string ProjectorServerPath;
+        public string ConsoleApplicationPath;
+        public bool IsTrackingHead;
+        public bool IsVerbose;
+        public bool IsDebug;
 
         public SettingsData() {
-            kinectServerPath = "";
-            projectorServerPath = "";
-            consoleApplicationPath = "";
-            isTrackingHead = false;
+            KinectServerPath = "";
+            ProjectorServerPath = "";
+            ConsoleApplicationPath = "";
         }
     }
 
@@ -28,51 +29,77 @@ public class SettingsWindow : EditorWindow {
 
     public static SettingsData Settings { get; private set; }
 
+
     public void ShowWindow()
     {
-        SettingsWindow window = (SettingsWindow)EditorWindow.GetWindow(typeof(SettingsWindow));
-        GUIContent titleContent = new GUIContent();
-        titleContent.text = windowTitle;
+        var window = (SettingsWindow)GetWindow(typeof(SettingsWindow));
+        var titleContent = new GUIContent
+        {
+            text = windowTitle
+        };
         window.titleContent = titleContent;
         window.Show();
     }
 
     void OnGUI()
     {
-        if (Settings == null) {
+        if (Settings == null)
+        {
             Settings = new SettingsData();
         }
 
         //Kinect Server Destination Section
         EditorGUILayout.BeginHorizontal();
-        Settings.kinectServerPath = EditorGUILayout.TextField("Kinect Server Path: ", Settings.kinectServerPath);
+        Settings.KinectServerPath = EditorGUILayout.TextField("Kinect Server Path: ", Settings.KinectServerPath);
         if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
         {
-            Settings.kinectServerPath = EditorUtility.OpenFilePanel("Select Kinect Server", "", "exe");
-        }
-        EditorGUILayout.EndHorizontal();
-        
-        //Projector Server Destination Section
-        EditorGUILayout.BeginHorizontal();
-        Settings.projectorServerPath = EditorGUILayout.TextField("Projector Server Path: ", Settings.projectorServerPath);
-        if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
-        {
-            Settings.projectorServerPath = EditorUtility.OpenFilePanel("Select Projector Server", "", "exe");
+            var tempPath = EditorUtility.OpenFilePanel("Select Kinect Server", "", "exe");
+            if (File.Exists(tempPath))
+            {
+                Settings.KinectServerPath = tempPath;
+            }
         }
         EditorGUILayout.EndHorizontal();
 
         //Projector Server Destination Section
         EditorGUILayout.BeginHorizontal();
-        Settings.consoleApplicationPath = EditorGUILayout.TextField("Console Application Path: ", Settings.consoleApplicationPath);
+        Settings.ProjectorServerPath = EditorGUILayout.TextField("Projector Server Path: ", Settings.ProjectorServerPath);
         if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
         {
-            Settings.consoleApplicationPath = EditorUtility.OpenFilePanel("Select Console Application", "", "exe");
+            var tempPath = EditorUtility.OpenFilePanel("Select Projector Server", "", "exe");
+            if (File.Exists(tempPath))
+            {
+                Settings.ProjectorServerPath = tempPath;
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+
+        //Projector Server Destination Section
+        EditorGUILayout.BeginHorizontal();
+        Settings.ConsoleApplicationPath = EditorGUILayout.TextField("Console Application Path: ", Settings.ConsoleApplicationPath);
+        if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
+        {
+            var tempPath = EditorUtility.OpenFilePanel("Select Console Application", "", "exe");
+            if (File.Exists(tempPath))
+            {
+                Settings.ConsoleApplicationPath = tempPath;
+            }
         }
         EditorGUILayout.EndHorizontal();
 
         //Whether to use head tracking Section
         EditorGUILayout.BeginHorizontal();
-        Settings.isTrackingHead = EditorGUILayout.Toggle("Use head tracking: ", Settings.isTrackingHead);
+        Settings.IsTrackingHead = EditorGUILayout.Toggle("Use head tracking:", Settings.IsTrackingHead);
+        EditorGUILayout.EndHorizontal();
+
+        //Show verbose messages?
+        EditorGUILayout.BeginHorizontal();
+        Settings.IsVerbose = EditorGUILayout.Toggle("Verbose console output:", Settings.IsVerbose);
+        EditorGUILayout.EndHorizontal();
+
+        //Show Debug messages?
+        EditorGUILayout.BeginHorizontal();
+        Settings.IsDebug = EditorGUILayout.Toggle("Enable debug messages:", Settings.IsDebug);
         EditorGUILayout.EndHorizontal();
 
         //Saving settings to XML Button
@@ -87,14 +114,13 @@ public class SettingsWindow : EditorWindow {
         {
             LoadSettings();
         }
-
         EditorGUILayout.EndHorizontal();
     }
 
     // Save settings to a JSON file
     private void SaveSettings()
     {
-        string serializedSettings = JsonUtility.ToJson(Settings);
+        var serializedSettings = JsonUtility.ToJson(Settings);
         File.WriteAllText(settingsFilePath, serializedSettings);
     }
 
@@ -103,7 +129,7 @@ public class SettingsWindow : EditorWindow {
     {
         if (File.Exists(settingsFilePath))
         {
-            string settingsText = File.ReadAllText(settingsFilePath);
+            var settingsText = File.ReadAllText(settingsFilePath);
             Settings = JsonUtility.FromJson<SettingsData>(settingsText);
         }
     }
