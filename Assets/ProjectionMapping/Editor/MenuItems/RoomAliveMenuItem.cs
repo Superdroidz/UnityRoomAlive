@@ -194,7 +194,7 @@ public class RoomAliveMenuItem : EditorWindow
     [MenuItem("RoomAlive/Create Prefabs", true)]
     static bool ValidateCreatePrefabs()
     {
-        return File.Exists(currentXMLFilePath) && calibrationComplete;
+        return File.Exists(currentXMLFilePath) && (calibrationComplete && fileLoaded);
     }
 
     [MenuItem("RoomAlive/Instantiate Prefabs", false, 104)]
