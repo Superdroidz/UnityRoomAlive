@@ -114,7 +114,7 @@ public class RoomAliveWrapper : ITKWrapper
     public void RunCalibration(string filepath)
     {
         var consoleApplicationPath = SettingsWindow.Settings.ConsoleApplicationPath;
-        if (!File.Exists(consoleApplicationPath))
+        if (File.Exists(consoleApplicationPath))
         {
             var folderPath = Path.GetDirectoryName(filepath);
             var fileName = Path.GetFileNameWithoutExtension(filepath);
