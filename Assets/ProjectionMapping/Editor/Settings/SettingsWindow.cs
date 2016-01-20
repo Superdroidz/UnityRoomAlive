@@ -27,7 +27,22 @@ public class SettingsWindow : EditorWindow {
     private static int buttonWidth = 130;
     private static string settingsFilePath = Application.dataPath + "/settings.xml";
 
-    public static SettingsData Settings { get; private set; }
+    private static SettingsData settings;
+    public static SettingsData Settings
+    {
+        get
+        {
+            if (settings == null) {
+                settings = new SettingsData();
+                LoadSettings();
+            }
+            return settings;
+        }
+        private set
+        {
+            settings = value;
+        }
+    }
 
     public void ShowWindow()
     {
@@ -42,11 +57,6 @@ public class SettingsWindow : EditorWindow {
 
     void OnGUI()
     {
-        if (Settings == null)
-        {
-            Settings = new SettingsData();
-            LoadSettings();
-        }
         string tempPath;
 
         //Kinect Server Destination Section
