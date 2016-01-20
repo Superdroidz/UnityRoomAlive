@@ -45,44 +45,46 @@ public class SettingsWindow : EditorWindow {
         if (Settings == null)
         {
             Settings = new SettingsData();
+            LoadSettings();
         }
+        string tempPath;
 
         //Kinect Server Destination Section
         EditorGUILayout.BeginHorizontal();
-        Settings.KinectServerPath = EditorGUILayout.TextField("Kinect Server Path: ", Settings.KinectServerPath);
+        tempPath = EditorGUILayout.TextField("Kinect Server Path: ", Settings.KinectServerPath);
         if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
         {
-            var tempPath = EditorUtility.OpenFilePanel("Select Kinect Server", "", "exe");
-            if (File.Exists(tempPath))
-            {
-                Settings.KinectServerPath = tempPath;
-            }
+            tempPath = EditorUtility.OpenFilePanel("Select Kinect Server", "", "exe");
+        }
+        if (File.Exists(tempPath))
+        {
+            Settings.KinectServerPath = tempPath;
         }
         EditorGUILayout.EndHorizontal();
 
         //Projector Server Destination Section
         EditorGUILayout.BeginHorizontal();
-        Settings.ProjectorServerPath = EditorGUILayout.TextField("Projector Server Path: ", Settings.ProjectorServerPath);
+        tempPath = EditorGUILayout.TextField("Projector Server Path: ", Settings.ProjectorServerPath);
         if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
         {
-            var tempPath = EditorUtility.OpenFilePanel("Select Projector Server", "", "exe");
-            if (File.Exists(tempPath))
-            {
-                Settings.ProjectorServerPath = tempPath;
-            }
+            tempPath = EditorUtility.OpenFilePanel("Select Projector Server", "", "exe");
+        }
+        if (File.Exists(tempPath))
+        {
+            Settings.ProjectorServerPath = tempPath;
         }
         EditorGUILayout.EndHorizontal();
 
         //Projector Server Destination Section
         EditorGUILayout.BeginHorizontal();
-        Settings.ConsoleApplicationPath = EditorGUILayout.TextField("Console Application Path: ", Settings.ConsoleApplicationPath);
+        tempPath = EditorGUILayout.TextField("Console Application Path: ", Settings.ConsoleApplicationPath);
         if (GUILayout.Button("Browse", GUILayout.Width(buttonWidth)))
         {
-            var tempPath = EditorUtility.OpenFilePanel("Select Console Application", "", "exe");
-            if (File.Exists(tempPath))
-            {
-                Settings.ConsoleApplicationPath = tempPath;
-            }
+            tempPath = EditorUtility.OpenFilePanel("Select Console Application", "", "exe");
+        }
+        if (File.Exists(tempPath))
+        {
+            Settings.ConsoleApplicationPath = tempPath;
         }
         EditorGUILayout.EndHorizontal();
 
@@ -117,14 +119,14 @@ public class SettingsWindow : EditorWindow {
     }
 
     // Save settings to a JSON file
-    private void SaveSettings()
+    private static void SaveSettings()
     {
         var serializedSettings = JsonUtility.ToJson(Settings);
         File.WriteAllText(settingsFilePath, serializedSettings);
     }
 
     // Load settings from a JSON file
-    private void LoadSettings()
+    private static void LoadSettings()
     {
         if (File.Exists(settingsFilePath))
         {

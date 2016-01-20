@@ -81,11 +81,14 @@ public class RoomAliveMenuItem : EditorWindow
     {
         fileSetupComplete = false;
         calibrationComplete = false;
-        currentXMLFilePath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
-        if (currentXMLFilePath == null || currentXMLFilePath.Equals("")) return; // must check for empty string here, as file will not exist
+        var tempPath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
+        if (tempPath != null && !tempPath.Equals(""))
+        {
+            currentXMLFilePath = tempPath;
+            wrapper.CreateNewSetup(currentXMLFilePath);
+            fileSetupComplete = true;
+        }
 
-        wrapper.CreateNewSetup(currentXMLFilePath);
-        fileSetupComplete = true;
     }
 
     [MenuItem("RoomAlive/Edit Setup", false, 52)]
@@ -106,11 +109,14 @@ public class RoomAliveMenuItem : EditorWindow
     [MenuItem("RoomAlive/Load Existing Setup", false, 53)]
     private static void LoadXML()
     {
-        currentXMLFilePath = EditorUtility.OpenFilePanel("Load Existing Setup", "", "xml");
-        if (!File.Exists(currentXMLFilePath)) return;
-        fileSetupComplete = true;
-        fileLoaded = true;
-        DisplayParseWindow();
+        var tempPath = EditorUtility.OpenFilePanel("Load Existing Setup", "", "xml");
+        if (File.Exists(currentXMLFilePath))
+        {
+            currentXMLFilePath = tempPath;
+            fileLoaded = true;
+            fileSetupComplete = true;
+            DisplayParseWindow();
+        }
 
     }
 
@@ -124,8 +130,8 @@ public class RoomAliveMenuItem : EditorWindow
         calibrationComplete = true;
     }
 
-    /* Prevents the user from running a calibration before a setup file
-    *  has been created or loaded
+    /* 
+    * Prevents the user from running a calibration before a setup file has been created or loaded.
     */
     [MenuItem("RoomAlive/Run Calibration", true)]
     private static bool CalibrationValidation()
@@ -133,6 +139,12 @@ public class RoomAliveMenuItem : EditorWindow
         return fileSetupComplete;
     }
 
+    /*
+    * Imports object file created by the calibration process.
+    *
+    * First searches for file with default filename. If not found, asks for file location.
+    * See ImportAssetFromPath for details on the import process itself.
+    */
     [MenuItem("RoomAlive/Import Room", false, 102)]
     private static void ImportRoom()
     {
@@ -192,32 +204,45 @@ public class RoomAliveMenuItem : EditorWindow
         return SceneSetup.DoPrefabsExist();
     }
 
+    /*
+    * Imports asset located at 'path', if such an asset exists.
+    *
+    * When importing, if an asset with the same name already exists in
+    * project root, appends an integer suffix to name.
+    *
+    * There are no safeguards against integer overflow here, but if it does
+    * occur there are likely to be greater problems to deal with.
+    */
     static void ImportAssetFromPath(string path)
     {
-        var name = Path.GetFileNameWithoutExtension(path);
-        var ext = Path.GetExtension(path);
-        var newPath = @"Assets/" + Path.GetFileName(path);
-        var index = 0;
-        while (File.Exists(newPath))
+        if (File.Exists(path))
         {
-            newPath = @"Assets/" + name + index.ToString() + ext;
-        }
-        name = name + index.ToString();
-        try
-        {
-            File.Copy(path, newPath);
-            AssetDatabase.ImportAsset(newPath);
-            var scene = AssetDatabase.LoadAssetAtPath<GameObject>(newPath);
-            Instantiate(scene);
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning("Could not import object from path " + path + ";\n" + e.Message);
+            var name = Path.GetFileNameWithoutExtension(path);
+            var ext = Path.GetExtension(path);
+            var newPath = @"Assets/" + Path.GetFileName(path);
+            var index = 0;
+            while (File.Exists(newPath))
+            {
+                newPath = @"Assets/" + name + index.ToString() + ext;
+            }
+            name = name + index.ToString();
+            try
+            {
+                File.Copy(path, newPath);
+                AssetDatabase.ImportAsset(newPath);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Could not import object from path " + path + ";\n" + e.Message);
+            }
         }
     }
 
-    /*  Prevents  a user from importing a room if a XML calibration file has not been
-    *   created or loaded.
+    /*
+    * Validation for 'Import Room' option.
+    *
+    * Stops the user from importing a room before loading an XML path or
+    * running the calibration process.
     */
     [MenuItem("RoomAlive/Import Room", true)]
     private static bool ImportRoomValidation()
@@ -257,10 +282,10 @@ public class RoomAliveMenuItem : EditorWindow
     private static GameObject InstantiatePrefabFromFilter(string prefabFilter)
     {
         GameObject instance = null;
-        string[] guids = AssetDatabase.FindAssets(prefabFilter);
+        var guids = AssetDatabase.FindAssets(prefabFilter);
         if (guids.Count() > 0) {
             var path = AssetDatabase.GUIDToAssetPath(guids[0]); // Could put a check to make sure only one prefab exists.
-            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
         }
         return instance;
