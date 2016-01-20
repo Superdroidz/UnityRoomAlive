@@ -5,7 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/ProjectionMapping/Demo/RoomFeatureAlignment/RoomFeatureAlignment.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/ProjectionMapping/Demo/DrawingWithKinect/DrawingWithKinect.unity
+  - enabled: 1
+    path: Assets/ProjectionMapping/Demos/HeadTracking/HeadTrackDemo.unity
