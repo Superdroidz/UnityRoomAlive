@@ -48,6 +48,7 @@ public class RoomAliveMenuItem : EditorWindow
     static bool fileSetupComplete;
     static bool calibrationComplete;
     static bool fileLoaded;
+    static bool ensembleManagerSaved;
 
     [MenuItem("RoomAlive/Start Kinect Server", false, 1)]
     private static void RunKinectServer()
@@ -81,6 +82,7 @@ public class RoomAliveMenuItem : EditorWindow
     {
         fileSetupComplete = false;
         calibrationComplete = false;
+        ensembleManagerSaved = false;
         var tempPath = EditorUtility.SaveFilePanel("Save Setup File", "", "cal", "xml");
         if (tempPath != null && !tempPath.Equals(""))
         {
@@ -172,7 +174,8 @@ public class RoomAliveMenuItem : EditorWindow
     [MenuItem("RoomAlive/Create Prefabs", false, 103)]
     private static void CreatePrefabs()
     {
-        if (File.Exists(currentXMLFilePath)) {
+        if (File.Exists(currentXMLFilePath))
+        {
             string ensembleManagerFilter = "EnsembleManager t:GameObject";
             GameObject managerInstance = InstantiatePrefabFromFilter(ensembleManagerFilter);
             EnsembleManager manager = managerInstance.GetComponent<EnsembleManager>();
@@ -189,7 +192,7 @@ public class RoomAliveMenuItem : EditorWindow
     [MenuItem("RoomAlive/Create Prefabs", true)]
     static bool ValidateCreatePrefabs()
     {
-        return File.Exists(currentXMLFilePath);
+        return File.Exists(currentXMLFilePath) && calibrationComplete;
     }
 
     [MenuItem("RoomAlive/Instantiate Prefabs", false, 104)]
@@ -201,7 +204,7 @@ public class RoomAliveMenuItem : EditorWindow
     [MenuItem("RoomAlive/Instantiate Prefabs", true)]
     static bool ValidateInstantiatePrefabs()
     {
-        return SceneSetup.DoPrefabsExist();
+        return SceneSetup.DoPrefabsExist() && ensembleManagerSaved;
     }
 
     /*
