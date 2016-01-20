@@ -9,41 +9,47 @@ public class ParseWindow : EditorWindow {
     private static int buttonWidth = 130;
     private string xmlFilePath;
 
+    //Current Values for each Kinect and Projector
     XmlNodeList kinectsNames;
     XmlNodeList kinectsIP;
     XmlNodeList projectorsNames;
     XmlNodeList projectorsIP;
     XmlNodeList projectorsDisplay;
 
+    //Original Values for each Kinect and Projector
+    //used to check for any pending changes that have been made within the ParseWindow
     XmlNodeList originalKinectsNames;
     XmlNodeList originalKinectsIP;
     XmlNodeList originalProjectorsNames;
     XmlNodeList originalProjectorsIP;
     XmlNodeList originalProjectorsDisplay;
 
+    //Current XML document
     XmlDocument doc;
 
-    XmlNodeList kinectDefault;
-    XmlNodeList projectorDefault;
-
+    //Values for the Kinect or Projector currently being added by the user
     string newKinectsName;
     string newKinectsIP;
     string newProjectorsName;
     string newProjectorsIP;
     string newProjectorsDisplay;
 
+    //Boolean to track whether there are any pending changes the user has made within the ParseWindow
     bool changes = false;
 
+    //Booleans to track whether the user is currently adding or removing a Kinect or Projector
     bool addingKinect = false;
     bool addingProjector = false;
     bool removingKinect = false;
     bool removingProjector = false;
 
+    //Booleans to track the Foldouts and whether they are collapsed or not
     bool showCameras = false;
     List<bool> showEachCamera = new List<bool>();
     bool showProjectors = false;
     List<bool> showEachProjector = new List<bool>();
 
+    //Numbers containing the index of the Kinect or Projector the user wishes to remove
     int kinectNum;
     int projectorNum;
 
@@ -55,24 +61,63 @@ public class ParseWindow : EditorWindow {
     {
         doc = newDoc;
     }
+    public void setParseWindow(ParseWindow window)
+    {
+        //Preserve changes by setting all the global values of this ParseWindow
+        //to the parameter ParseWindow's global values
+        this.kinectsNames = window.kinectsNames;
+        this.kinectsIP = window.kinectsIP;
+        this.projectorsNames = window.projectorsNames;
+        this.projectorsIP = window.projectorsIP;
+        this.projectorsDisplay = window.projectorsDisplay;
+
+        this.originalKinectsNames = window.originalKinectsNames;
+        this.originalKinectsIP = window.originalKinectsIP;
+        this.originalProjectorsNames = window.originalProjectorsIP;
+        this.originalProjectorsIP = window.originalProjectorsIP;
+        this.originalProjectorsDisplay = window.originalProjectorsDisplay;
+
+        this.newKinectsName = window.newKinectsName;
+        this.newKinectsIP = window.newKinectsIP;
+        this.newProjectorsName = window.newProjectorsName;
+        this.newProjectorsIP = window.newProjectorsIP;
+        this.newProjectorsDisplay = window.newProjectorsDisplay;
+
+        this.changes = window.changes;
+
+        this.addingKinect = window.addingKinect;
+        this.addingProjector = window.addingProjector;
+        this.removingKinect = window.removingKinect;
+        this.removingProjector = window.removingProjector;
+
+        this.showCameras = window.showCameras;
+        this.showEachCamera = window.showEachCamera;
+        this.showProjectors = window.showProjectors;
+        this.showEachProjector = window.showEachProjector;
+
+        this.kinectNum = window.kinectNum;
+        this.projectorNum = window.projectorNum;
+    }
 
     public void ParseFile()
     {
-
+        //Get all the "camera" Elements in the XML file
         XmlNodeList kinects = doc.GetElementsByTagName("cameras");
+        //As we know there is only one set of tags for "cameras", grab the first member
         string kinect = kinects[0].OuterXml;
         originalKinectsNames = getTags(kinect, "name");
         originalKinectsIP = getTags(kinect, "hostNameOrAddress");
 
+        //Get all the "projector" Elements in the XML file
         XmlNodeList projectors = doc.GetElementsByTagName("projectors");
+        //As we know there is only one set of tags for "projectors", grab the first member
         string project = projectors[0].OuterXml;
         originalProjectorsNames = getTags(project, "name");
         originalProjectorsIP = getTags(project, "hostNameOrAddress");
         originalProjectorsDisplay = getTags(project, "displayIndex");
 
-        //XmlNodeList poses = doc.GetElementsByTagName("pose");
-        //XmlNodeList ensemble = doc.GetElementsByTagName("ProjectorCameraEnsemble");
 
+        //Necessary to store values in secondary variables so that any changes can be reverted
         kinectsNames = getTags(kinect, "name"); ;
         kinectsIP = getTags(kinect, "hostNameOrAddress"); ;
 
@@ -89,6 +134,8 @@ public class ParseWindow : EditorWindow {
 
     XmlNodeList getTags(string xml, string tag)
     {
+        //This function treats the parameter xml as a document so that we may search within it
+        //to find all the tags that match the parameter tag
         XmlDocument temp = new XmlDocument();
         temp.LoadXml(xml);
         XmlNodeList results = temp.GetElementsByTagName(tag);
@@ -97,10 +144,12 @@ public class ParseWindow : EditorWindow {
 
     void SaveChanges()
     {
+        //Get all the current values of the relevent elements in the existing document
         XmlNodeList tempNames = doc.GetElementsByTagName("name");
         XmlNodeList tempIP = doc.GetElementsByTagName("hostNameOrAddress");
         XmlNodeList tempDisplay = doc.GetElementsByTagName("displayIndex");
         int count = 0;
+        //Change each camera element to its new value
         for (int i = 0; i < kinectsNames.Count; i++)
             {
                 if (kinectsNames[i].InnerText.Length > 0)
@@ -115,7 +164,7 @@ public class ParseWindow : EditorWindow {
                 }
                 count++;
             }
-        
+        //Change each projector element to its new value
             for (int i = 0; i < projectorsNames.Count; i++)
             {
                 int index = i + count;
@@ -139,6 +188,8 @@ public class ParseWindow : EditorWindow {
 
     public void AddKinect()
     {
+        //To keep the new Kinect consistent with the existing Kinects, must mimic all fields namespace and values,
+        //excluding the relevant fields so we can insert the desired values
         XmlNodeList tempKinect = doc.GetElementsByTagName("cameras");
         string temp = "ProjectorCameraEnsemble.Camera";
 
@@ -171,11 +222,14 @@ public class ParseWindow : EditorWindow {
     }
     public void RemoveKinect()
     {
+        //Get all the current cameras in the existing document and remove the relevant camera
         XmlNodeList tempKinect = doc.GetElementsByTagName("cameras");
         tempKinect[0].RemoveChild(tempKinect[0].ChildNodes[kinectNum]);
     }
     public void AddProjector()
     {
+        //To keep the new Projector consistent with the existing Projectors, must mimic all fields namespace and values,
+        //excluding the relevant fields so we can insert the desired values
         XmlNodeList tempProjector = doc.GetElementsByTagName("projectors");
         string temp = "ProjectorCameraEnsemble.Projector";
 
@@ -225,6 +279,7 @@ public class ParseWindow : EditorWindow {
     }
     public void RemoveProjector()
     {
+        //Get all the current projectors in the existing document and remove the relevant projector
         XmlNodeList tempKinect = doc.GetElementsByTagName("projectors");
         tempKinect[0].RemoveChild(tempKinect[0].ChildNodes[projectorNum]);
     }
@@ -241,18 +296,20 @@ public class ParseWindow : EditorWindow {
 
     void OnGUI()
     {
+        //While the ParseWindow is still open
+        //Don't attempt any interactions with camera values if there isn't any cameras in the file
         if (kinectsNames != null) {
             showCameras = EditorGUILayout.Foldout(showCameras, "Cameras");
             EditorGUI.indentLevel++;
-            if (showCameras) {
-            for (int i = 0; i < kinectsNames.Count; i++)
+            if (showCameras) { //if the Camera Foldout has been collapsed
+                for (int i = 0; i < kinectsNames.Count; i++) //for each Kinect
             {
-                if (i == showEachCamera.Count)
+                if (i == showEachCamera.Count) //if the collapse list has no record for this Kinect
                 {
                     showEachCamera.Add(false);
                 }
                 showEachCamera[i] = EditorGUILayout.Foldout(showEachCamera[i], "Kinect " + (i));
-                if (showEachCamera[i]) {
+                if (showEachCamera[i]) { //if this Kinect's Foldout has been collapsed
                     EditorGUI.indentLevel++;
                 EditorGUILayout.BeginHorizontal();
                 kinectsNames[i].InnerText = EditorGUILayout.TextField("Name: ", kinectsNames[i].InnerText);
@@ -265,29 +322,29 @@ public class ParseWindow : EditorWindow {
 
                 if (!kinectsNames[i].InnerText.Equals(originalKinectsNames[i].InnerText)
                     || !kinectsIP[i].InnerText.Equals(originalKinectsIP[i].InnerText))
-                {
+                { //if any changes have been made to any of the text fields for this Kinect
                     changes = true;
                 }
             }
         }
             EditorGUI.indentLevel--;
     }
-        
+        //Don't attempt any interactions with projector values if there isn't any projectors in the file
         if (projectorsNames != null)
         {
              showProjectors = EditorGUILayout.Foldout(showProjectors, "Projectors");
              EditorGUI.indentLevel++;
-             if (showProjectors)
+             if (showProjectors) //if the Projector Foldout has been collapsed
              {
-                 for (int i = 0; i < projectorsNames.Count; i++)
+                 for (int i = 0; i < projectorsNames.Count; i++) //for each Projector
                  {
-                     if (i == showEachProjector.Count)
+                     if (i == showEachProjector.Count) //if the collapse list has no record for this Projector
                 {
                     showEachProjector.Add(false);
                 }
                 showEachProjector[i] = EditorGUILayout.Foldout(showEachProjector[i], "Projector " + (i));
 
-                if (showEachProjector[i])
+                if (showEachProjector[i]) //if this Projector's Foldout has been collapsed
                 {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.BeginHorizontal();
@@ -304,7 +361,7 @@ public class ParseWindow : EditorWindow {
                     if (!projectorsNames[i].InnerText.Equals(originalProjectorsNames[i].InnerText)
                         || !projectorsIP[i].InnerText.Equals(originalProjectorsIP[i].InnerText)
                             || !projectorsDisplay[i].InnerText.Equals(originalProjectorsDisplay[i].InnerText))
-                    {
+                    { //if any changes have been made to any of the text fields for this Projector
                         changes = true;
 
                     }
@@ -423,7 +480,6 @@ public class ParseWindow : EditorWindow {
             {
                 SaveChanges();
                 changes = false;
-            UnityEngine.Debug.Log("Changes Saved");
             };
             EditorGUILayout.Space();
             
@@ -438,20 +494,24 @@ public class ParseWindow : EditorWindow {
 
     void OnDestroy()
     {
+        //When the user tries to close the ParseWindow
         if (changes)
         {
             int popup = EditorUtility.DisplayDialogComplex("Save Changes?", "You have made unfinished changes to the XML file. Would you like to save your changes?", "Yes", "No", "Cancel");
             
-            if (popup == 0)
+            if (popup == 0) //if the user selects "Yes"
             {
                 SaveChanges();
             }
-            else if (popup == 2)
+            //if the user selects "No", proceed to close the window without any further action
+            else if (popup == 2) //if the user selects "Cancel"
             {
+                //Create an identical ParseWindow that will remain after this ParseWindow closes
+                //allowing all changes to be preserved
                 ParseWindow newWindow = (ParseWindow)ScriptableObject.CreateInstance("ParseWindow");
                 newWindow.setFilePath(xmlFilePath);
                 newWindow.setCurrentDoc(doc);
-                newWindow.ParseFile();
+                newWindow.setParseWindow(this);
                 newWindow.ShowWindow();
             }
         }
