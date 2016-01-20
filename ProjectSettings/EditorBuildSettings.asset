@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Presentation/01roomalignment.unity
+    path: Assets/ProjectionMapping/Demo/RoomFeatureAlignment/RoomFeatureAlignment.unity
   - enabled: 1
-    path: Assets/Presentation/02painting.unity
+    path: Assets/ProjectionMapping/Demo/DrawingWithKinect/DrawingWithKinect.unity
