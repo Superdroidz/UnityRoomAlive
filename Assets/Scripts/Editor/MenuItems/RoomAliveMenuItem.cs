@@ -34,6 +34,9 @@ public class RoomAliveMenuItem : EditorWindow
         wrapper.StopServers();
     }
 
+    /* Prevents the user from stopping servers if they
+    *  are not running.
+    */
     [MenuItem("RoomAlive/Stop Servers", true)]
     private static bool ValidateStopServers()
     {
@@ -58,6 +61,9 @@ public class RoomAliveMenuItem : EditorWindow
         DisplayParseWindow();
     }
 
+    /* Prevents the user from editing a XML calibration file
+    *  before it has been created or loaded.
+    */
     [MenuItem("RoomAlive/Edit Setup", true)]
     private static bool ValidateEditSetup()
     {
@@ -74,12 +80,7 @@ public class RoomAliveMenuItem : EditorWindow
         DisplayParseWindow();
 
     }
-    ////Validation for editing the current setup file. Stops user from editing a non-existent XML file.
-    //[MenuItem("RoomAlive/Edit Setup", false)] // TODO:  Change back to true once testing is complete.
-    //private static bool ParseXMLValidation()
-    //{
-    //    return fileSetupComplete;
-    //}
+
     [MenuItem("RoomAlive/Run Calibration", false, 101)]
     private static void Calibrate()
     {
@@ -90,8 +91,10 @@ public class RoomAliveMenuItem : EditorWindow
         calibrationComplete = true;
     }
 
-    //Validation for Running a calibration. Stops user running the calibration unless a setup file has been created.
-    [MenuItem("RoomAlive/Run Calibration", true)]// TODO : Change back to true once testing is complete.
+    /* Prevents the user from running a calibration before a setup file
+    *  has been created or loaded
+    */
+    [MenuItem("RoomAlive/Run Calibration", true)]
     private static bool CalibrationValidation()
     {
         return fileSetupComplete;
@@ -143,7 +146,9 @@ public class RoomAliveMenuItem : EditorWindow
         }
     }
 
-    //Validation for Importing an Object File into Unity. Stops the user from importing a room before running the calibration.
+    /*  Prevents  a user from importing a room if a XML calibration file has not been
+    *   created or loaded.
+    */
     [MenuItem("RoomAlive/Import Room", true)]
     private static bool ImportRoomValidation()
     {
