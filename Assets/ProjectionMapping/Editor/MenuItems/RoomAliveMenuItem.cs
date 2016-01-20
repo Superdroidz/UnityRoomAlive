@@ -112,7 +112,7 @@ public class RoomAliveMenuItem : EditorWindow
     private static void LoadXML()
     {
         var tempPath = EditorUtility.OpenFilePanel("Load Existing Setup", "", "xml");
-        if (File.Exists(currentXMLFilePath))
+        if (File.Exists(tempPath))
         {
             currentXMLFilePath = tempPath;
             fileLoaded = true;
