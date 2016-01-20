@@ -186,6 +186,8 @@ public class RoomAliveMenuItem : EditorWindow
             GameObject managerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ensembleManagerPath);
             PrefabUtility.ReplacePrefab(manager.gameObject, managerPrefab);
             DestroyImmediate(manager.gameObject);
+
+            ensembleManagerSaved = true;
         }
     }
 
