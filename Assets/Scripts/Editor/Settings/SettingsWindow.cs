@@ -29,7 +29,6 @@ public class SettingsWindow : EditorWindow {
 
     public static SettingsData Settings { get; private set; }
 
-
     public void ShowWindow()
     {
         var window = (SettingsWindow)GetWindow(typeof(SettingsWindow));
