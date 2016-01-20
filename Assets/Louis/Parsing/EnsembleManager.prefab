@@ -1,0 +1,300 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &132984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 431630}
+  - 114: {fileID: 11498836}
+  m_Layer: 0
+  m_Name: EnsembleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &431630
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 132984}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11498836
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 132984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9851d4e7271cf224f83d9f649f6f065f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    name: Please run RoomAlive/AdaptXml
+    cameras: []
+    projectors: []
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: cameraPrefab
+      value: 
+      objectReference: {fileID: 2055366, guid: 4a979641f4ddd6646990c6fa2e2a8398, type: 2}
+    - target: {fileID: 0}
+      propertyPath: ensembleFolder
+      value: 219b
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.colorCameraMatrix.e00
+      value: 1067.006
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.colorCameraMatrix.e02
+      value: 956.40186
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.colorCameraMatrix.e11
+      value: 1066.6123
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.colorCameraMatrix.e12
+      value: 540.67993
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.colorCameraMatrix.e22
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.colorLensDistortion.e00
+      value: 0.006500461
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.colorLensDistortion.e10
+      value: -0.0029116045
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthCameraMatrix.e00
+      value: 367.38556
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthCameraMatrix.e02
+      value: 258.357
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthCameraMatrix.e11
+      value: 367.41837
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthCameraMatrix.e12
+      value: 219.2333
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthCameraMatrix.e22
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthLensDistortion.e00
+      value: 0.05388215
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthLensDistortion.e10
+      value: -0.16353257
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e00
+      value: 0.99978906
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e01
+      value: -0.020421017
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e02
+      value: 0.002218875
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e03
+      value: 0.052518345
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e10
+      value: 0.020417877
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e11
+      value: 0.99979055
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e12
+      value: 0.0014285647
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e13
+      value: 0.000024896972
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e20
+      value: -0.0022475747
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e21
+      value: -0.0013829671
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e22
+      value: 0.99999654
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e23
+      value: -0.00003117694
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].calibration.depthToColorTransform.e33
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].hostNameOrAddress
+      value: louischan-xps13
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].name
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].pose.e00
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].pose.e11
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].pose.e22
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.cameras.Array.data[0].pose.e33
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].cameraMatrix.e00
+      value: 2131.483
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].cameraMatrix.e02
+      value: 605.4647
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].cameraMatrix.e11
+      value: 2131.483
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].cameraMatrix.e12
+      value: -48.26527
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].cameraMatrix.e22
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].displayIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].width
+      value: 1280
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].height
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].hostNameOrAddress
+      value: louischan-xps13
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].name
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e00
+      value: 0.9957054
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e01
+      value: 0.01677287
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e02
+      value: -0.09104578
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e03
+      value: 0.109296866
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e10
+      value: -0.031435527
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e11
+      value: 0.98627466
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e12
+      value: -0.1620928
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e13
+      value: -0.06612842
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e20
+      value: 0.08707739
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e21
+      value: 0.16425876
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e22
+      value: 0.9825663
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e23
+      value: -0.08843322
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.projectors.Array.data[0].pose.e33
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: data.name
+      value: Please run RoomAlive/AdaptXml
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 132984}
+  m_IsPrefabParent: 1

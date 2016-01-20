@@ -1,22 +1,14 @@
 ﻿using System.Collections.Generic;
 using Assets.Math;
+using Assets.Parsing;
 using UnityEngine;
 
-namespace Assets.Parsing {
+namespace Assets.Projection {
     public class ProjectorCamera {
 
-        public Camera CameraComponent { get; private set; }
-        public List<Vector3> ProjectedPoints { get; private set; }
-        public Vector3 LOSCentre {
-            get {
-                return ProjectedPoints[0] +
-                    0.5f * (ProjectedPoints[2] - ProjectedPoints[0]);
-            }
-        }
+        public ProjectionRect ProjectedRect { get; private set; }
 
-        public ProjectorCamera(Camera cameraObj, ProjectorData projectorData) {
-            CameraComponent = cameraObj;
-
+        public ProjectorCamera(ProjectorData projectorData) {
             // Take the inverse because we need to map projector's center to origin.
             Matrix4x4 worldToCameraMatrix = projectorData.pose.inverse;
             // Reflect in z axis because worldToCameraMatrix is OpenGL convention.
@@ -28,13 +20,13 @@ namespace Assets.Parsing {
             worldToCameraMatrix[1, 0] = -worldToCameraMatrix[1, 0];
             worldToCameraMatrix[0, 2] = -worldToCameraMatrix[0, 2];
             worldToCameraMatrix[2, 0] = -worldToCameraMatrix[2, 0];
-            CameraComponent.worldToCameraMatrix = worldToCameraMatrix;
+            Camera.main.worldToCameraMatrix = worldToCameraMatrix;
 
             Matrix4x4 projectionMatrix = GraphicsTransforms.ProjectionFromIntrinsicCamera(
                 projectorData.cameraMatrix, projectorData.width, projectorData.height);
-            CameraComponent.projectionMatrix = projectionMatrix;
+            Camera.main.projectionMatrix = projectionMatrix;
 
-            ProjectedPoints = GetProjectedPoints();
+            ProjectedRect = new ProjectionRect(GetProjectedPoints());
         }
 
         private List<Vector3> GetProjectedPoints() {
@@ -48,7 +40,7 @@ namespace Assets.Parsing {
             var projectedPoints = new List<Vector3>();
             foreach (Ray ray in rays) {
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, CameraComponent.farClipPlane)) {
+                if (Physics.Raycast(ray, out hit, Camera.main.farClipPlane, LayerMask.GetMask("Room"))) {
                     projectedPoints.Add(hit.point);
                 } else {
                     projectedPoints.Add(Vector3.zero);

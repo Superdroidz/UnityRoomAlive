@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Assets.Interop;
-using Debug = UnityEngine.Debug;
 
 namespace Assets.Parsing {
 
+    [Serializable]
     public class EnsembleData {
-        public string Name { get; private set; }
-        public IEnumerable<CameraData> Cameras { get; private set; }
-        public IEnumerable<ProjectorData> Projectors { get; private set; }
+
+        public string name;
+        public List<CameraData> cameras;
+        public List<ProjectorData> projectors;
 
         public EnsembleData(string ensembleFile) {
             XElement root = XElement.Load(ensembleFile);
@@ -18,17 +19,17 @@ namespace Assets.Parsing {
             // Deserialize ensemble file
             try {
                 XNamespace ns = root.Name.Namespace;
-                Name = root.Element(ns + "name").Value;
-                Cameras =
-                    from camera in root.Descendants(ns + "ProjectorCameraEnsemble.Camera")
+                name = root.Element(ns + "name").Value;
+                cameras =
+                    (from camera in root.Descendants(ns + "ProjectorCameraEnsemble.Camera")
                     select new CameraData {
                         calibration = MakeCalibration(camera, ns),
                         hostNameOrAddress = camera.Element(ns + "hostNameOrAddress").Value,
                         name = camera.Element(ns + "name").Value,
                         pose = CalibrationMatrix.ToMatrix4x4(camera.Element(ns + "pose"))
-                    };
-                Projectors =
-                    from projector in root.Descendants(ns + "ProjectorCameraEnsemble.Projector")
+                    }).ToList();
+                projectors =
+                    (from projector in root.Descendants(ns + "ProjectorCameraEnsemble.Projector")
                     select new ProjectorData {
                         cameraMatrix = CalibrationMatrix.ToMatrix4x4(projector.Element(ns + "cameraMatrix")),
                         displayIndex = Convert.ToInt32(projector.Element(ns + "displayIndex").Value),
@@ -39,7 +40,7 @@ namespace Assets.Parsing {
                         lockIntrinsics = Convert.ToBoolean(projector.Element(ns + "lockIntrinsics").Value),
                         name = projector.Element(ns + "name").Value,
                         pose = CalibrationMatrix.ToMatrix4x4(projector.Element(ns + "pose"))
-                    };
+                    }).ToList();
             } catch (NullReferenceException) {
                 throw new NullReferenceException("File incorrect format.");
             }

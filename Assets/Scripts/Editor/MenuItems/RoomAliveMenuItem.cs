@@ -2,10 +2,43 @@
 using UnityEditor;
 using System;
 using System.IO;
-
+using System.Linq;
+using Assets.Parsing;
 
 public class RoomAliveMenuItem : EditorWindow
 {
+    // Class for setting up the scene, as well as verifying required prefabs
+    // exist for doing so.
+    class SceneSetup
+    {
+
+        private static string[] managerPrefabFilters = {
+            "BodySourceManager t:GameObject",
+            "EnsembleManager t:GameObject",
+            "ProjectorManager t:GameObject"
+        };
+        private static string headTrackerPrefabFilter = "HeadTracker t:prefab";
+
+        public static void SetupScene()
+        {
+            foreach (string managerPrefabFilter in managerPrefabFilters)
+            {
+                InstantiatePrefabFromFilter(managerPrefabFilter);
+            }
+            if (SettingsWindow.Settings != null && SettingsWindow.Settings.IsTrackingHead)
+            {
+                InstantiatePrefabFromFilter(headTrackerPrefabFilter);
+            }
+        }
+
+        public static bool DoPrefabsExist()
+        {
+            return managerPrefabFilters.All(filter => AssetDatabase.FindAssets(filter).Count() > 0) &&
+                   (SettingsWindow.Settings == null || !SettingsWindow.Settings.IsTrackingHead ||
+                    AssetDatabase.FindAssets(headTrackerPrefabFilter).Count() > 0);
+        }
+    }
+
     public static ParseWindow ParseWindow;
     public static SettingsWindow SettingsWindow;
 
@@ -124,6 +157,41 @@ public class RoomAliveMenuItem : EditorWindow
         }
     }
 
+    [MenuItem("RoomAlive/Create Prefabs", false, 103)]
+    private static void CreatePrefabs()
+    {
+        if (File.Exists(currentXMLFilePath)) {
+            string ensembleManagerFilter = "EnsembleManager t:GameObject";
+            GameObject managerInstance = InstantiatePrefabFromFilter(ensembleManagerFilter);
+            EnsembleManager manager = managerInstance.GetComponent<EnsembleManager>();
+            manager.data = new EnsembleData(currentXMLFilePath);
+
+            var guids = AssetDatabase.FindAssets(ensembleManagerFilter);
+            string ensembleManagerPath = AssetDatabase.GUIDToAssetPath(guids[0]);
+            GameObject managerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ensembleManagerPath);
+            PrefabUtility.ReplacePrefab(manager.gameObject, managerPrefab);
+            DestroyImmediate(manager.gameObject);
+        }
+    }
+
+    [MenuItem("RoomAlive/Create Prefabs", true)]
+    static bool ValidateCreatePrefabs()
+    {
+        return File.Exists(currentXMLFilePath);
+    }
+
+    [MenuItem("RoomAlive/Instantiate Prefabs", false, 104)]
+    static void InstantiatePrefabs()
+    {
+        SceneSetup.SetupScene();
+    }
+
+    [MenuItem("RoomAlive/Instantiate Prefabs", true)]
+    static bool ValidateInstantiatePrefabs()
+    {
+        return SceneSetup.DoPrefabsExist();
+    }
+
     static void ImportAssetFromPath(string path)
     {
         var name = Path.GetFileNameWithoutExtension(path);
@@ -139,6 +207,8 @@ public class RoomAliveMenuItem : EditorWindow
         {
             File.Copy(path, newPath);
             AssetDatabase.ImportAsset(newPath);
+            var scene = AssetDatabase.LoadAssetAtPath<GameObject>(newPath);
+            Instantiate(scene);
         }
         catch (Exception e)
         {
@@ -182,5 +252,17 @@ public class RoomAliveMenuItem : EditorWindow
         {
             Debug.LogError("No XML file found at filepath " + currentXMLFilePath);
         }
+    }
+
+    private static GameObject InstantiatePrefabFromFilter(string prefabFilter)
+    {
+        GameObject instance = null;
+        string[] guids = AssetDatabase.FindAssets(prefabFilter);
+        if (guids.Count() > 0) {
+            var path = AssetDatabase.GUIDToAssetPath(guids[0]); // Could put a check to make sure only one prefab exists.
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+        }
+        return instance;
     }
 }

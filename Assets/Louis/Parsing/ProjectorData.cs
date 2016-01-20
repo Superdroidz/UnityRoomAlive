@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Parsing {
+    [Serializable]
     public struct ProjectorData {
         public Matrix4x4 cameraMatrix;
         public int displayIndex;
