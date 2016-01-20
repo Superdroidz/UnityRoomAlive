@@ -25,7 +25,7 @@ public class RoomAliveMenuItem : EditorWindow
             {
                 InstantiatePrefabFromFilter(managerPrefabFilter);
             }
-            if (SettingsWindow.Settings != null && SettingsWindow.Settings.isTrackingHead)
+            if (SettingsWindow.Settings != null && SettingsWindow.Settings.IsTrackingHead)
             {
                 InstantiatePrefabFromFilter(headTrackerPrefabFilter);
             }
@@ -34,7 +34,7 @@ public class RoomAliveMenuItem : EditorWindow
         public static bool DoPrefabsExist()
         {
             return managerPrefabFilters.All(filter => AssetDatabase.FindAssets(filter).Count() > 0) &&
-                   (SettingsWindow.Settings == null || !SettingsWindow.Settings.isTrackingHead ||
+                   (SettingsWindow.Settings == null || !SettingsWindow.Settings.IsTrackingHead ||
                     AssetDatabase.FindAssets(headTrackerPrefabFilter).Count() > 0);
         }
     }
