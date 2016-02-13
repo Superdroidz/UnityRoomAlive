@@ -7,8 +7,8 @@ This project is still in development and therefore this README will be updated w
 ## Authors
 This was a joint effort of the following team members :
 
-* Adam Gestwa (https://github.com/Superdroidz)
-* Anton Alenov (https://github.com/ABoxOfFoxes)
+* [Adam Gestwa] (https://github.com/Superdroidz)
+* [Anton Alenov] (https://github.com/ABoxOfFoxes)
 * Alan Han
 * Louis Chan 
 * Ben Shuttlework
