@@ -1,6 +1,6 @@
 #Unoffical RoomAlive Toolkit Unity Intergration README
 
-This project intergrates the RoomAlive Toolkit created by Microsoft Research. It uses a modified version of the toolkit which can be found [here](repo for RATK) which is required to work. It allows developers to calibrate, scan and import the room object file all within Unity.
+This project intergrates the RoomAlive Toolkit created by Microsoft Research. It uses a modified version of the toolkit which can be found [here](https://github.com/Superdroidz/RoomAliveToolkitConsole) which is required to work. It allows developers to calibrate, scan and import the room object file all within Unity.
 
 This project is still in development and therefore this README will be updated with any changes that affect the use of the plugin.
 
