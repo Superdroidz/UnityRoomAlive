@@ -7,12 +7,12 @@ This project is still in development and therefore this README will be updated w
 ## Authors
 This was a joint effort of the following team members :
 
-Adam Gestwa (GitHub link)
-Anton Alenov (GitHub link)
-Alan Han (GitHub link)
-Louis Chan (GitHub link)
-Ben Shuttlework (Github link)
-James Baldock
+*Adam Gestwa (https://github.com/Superdroidz)
+*Anton Alenov (https://github.com/ABoxOfFoxes)
+*Alan Han
+*Louis Chan 
+*Ben Shuttlework
+*James Baldock
 
 ## Prerequisites
 * Visual Studio 2015 Community Edition (or better)
