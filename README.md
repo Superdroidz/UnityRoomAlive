@@ -10,7 +10,7 @@ This was a joint effort of the following team members :
 * [Adam Gestwa] (https://github.com/Superdroidz)
 * [Anton Alenov] (https://github.com/ABoxOfFoxes)
 * Alan Han
-* Louis Chan 
+* [Louis Chan] (https://github.com/louisch) 
 * Ben Shuttlework
 * James Baldock
 
